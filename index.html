@@ -144,7 +144,7 @@
 
             <nav class="hidden md:flex items-center space-x-6 font-heading text-sm uppercase tracking-wider">
                 <a href="#home" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_home">Home</a>
-                <a href="#games" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold">Games</a>
+                <a href="#games" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_games">Games</a>
                 <a href="#discord" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_discord">Discord</a>
 
                 <!-- Language Dropdown -->
@@ -182,7 +182,7 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-brand-gold/30 px-4 pt-2 pb-6 space-y-3 font-heading uppercase text-sm">
             <a href="#home" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_home">Home</a>
-            <a href="#games" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800">Games</a>
+            <a href="#games" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_games">Games</a>
             <a href="#discord" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_discord">Discord</a>
         </div>
     </header>
@@ -214,12 +214,12 @@
                     <a href="https://discord.gg/WBAmVQtfAa" target="_blank" rel="noopener noreferrer" 
                        class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl shadow-neon-gold hover:shadow-neon-hover transition-all duration-300 transform hover:-translate-y-1">
                         <i class="fa-brands fa-discord text-xl"></i>
-                        <span>Join Discord Community</span>
+                        <span data-i18n="btn_join_discord_comm">Join Discord Community</span>
                     </a>
                     <a href="#games" 
                        class="inline-flex items-center justify-center gap-2 bg-brand-card hover:bg-brand-cardHover text-white font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
                         <i class="fa-solid fa-gamepad text-brand-gold"></i>
-                        <span>View Active Games</span>
+                        <span data-i18n="btn_view_games">View Active Games</span>
                     </a>
                 </div>
             </div>
@@ -229,9 +229,9 @@
         <section id="games" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider mb-4">
-                    FEATURED <span class="text-brand-gold text-glow">GAMES</span>
+                    <span data-i18n="featured_text">FEATURED</span> <span class="text-brand-gold text-glow" data-i18n="games_text">GAMES</span>
                 </h2>
-                <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
+                <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base" data-i18n="games_subtitle">
                     Explore the best MMORPG private servers available under LEGEND AEGIS.
                 </p>
                 <div class="w-24 h-1 bg-brand-gold mx-auto mt-4 rounded-full"></div>
@@ -243,7 +243,7 @@
                     <div>
                         <div class="game-art-wrap">
                             <img src="logo.png" alt="LEGEND AEGIS" class="game-art game-logo-art">
-                            <span class="game-status bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold">
+                            <span class="game-status bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold" data-i18n="status_coming_soon">
                                 COMING SOON
                             </span>
                         </div>
@@ -252,7 +252,7 @@
                             <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">LEGEND AEGIS</h3>
                         </div>
                         <div class="p-8">
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed" data-i18n="card1_desc">
                                 Conquer the realm of NEW MIR4 LEGEND AEGIS through epic battles, fierce clan wars, and legendary sieges.
                             </p>
                         </div>
@@ -261,17 +261,17 @@
                         <a href="https://discord.gg/g22pR3ttTN" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
                             <i class="fa-brands fa-discord"></i>
-                            <span>Discord</span>
+                            <span data-i18n="btn_discord">Discord</span>
                         </a>
                         <a href="https://www.legend-aegis.com" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
                             <i class="fa-solid fa-globe"></i>
-                            <span>Website</span>
+                            <span data-i18n="btn_website">Website</span>
                         </a>
                         <button type="button" data-coming-soon="MIR4 AEGIS Download"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
                             <i class="fa-solid fa-download"></i>
-                            <span>Download</span>
+                            <span data-i18n="btn_download">Download</span>
                         </button>
                     </div>
                 </div>
@@ -281,7 +281,7 @@
                     <div>
                         <div class="game-art-wrap">
                             <img src="ASTRAL.png" alt="ASTRAL" class="game-art game-logo-art">
-                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold">
+                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold" data-i18n="status_online">
                                 ONLINE
                             </span>
                         </div>
@@ -290,7 +290,7 @@
                             <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">ASTRAL</h3>
                         </div>
                         <div class="p-8">
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed" data-i18n="card2_desc">
                                 Conquer the realm of ASTRAL through epic battles and fierce competition. Build powerful communities.
                             </p>
                         </div>
@@ -299,17 +299,17 @@
                         <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
                             <i class="fa-brands fa-discord"></i>
-                            <span>Discord</span>
+                            <span data-i18n="btn_discord">Discord</span>
                         </a>
                         <a href="https://www.play-astral.com" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
                             <i class="fa-solid fa-globe"></i>
-                            <span>Website</span>
+                            <span data-i18n="btn_website">Website</span>
                         </a>
                         <button type="button" id="astral-download-btn"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
                             <i class="fa-solid fa-download"></i>
-                            <span>Download</span>
+                            <span data-i18n="btn_download">Download</span>
                         </button>
                     </div>
                 </div>
@@ -319,7 +319,7 @@
                     <div>
                         <div class="game-art-wrap">
                             <img src="ROM.png" alt="ROM: Remember of Majesty" class="game-art game-logo-art">
-                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold">
+                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold" data-i18n="status_online">
                                 ONLINE
                             </span>
                         </div>
@@ -328,7 +328,7 @@
                             <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">ROM: REMEMBER OF MAJESTY</h3>
                         </div>
                         <div class="p-8">
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed" data-i18n="card3_desc">
                                 Forge your destiny in the world of Majesty. Battle alongside your guild and build your legacy.
                             </p>
                         </div>
@@ -337,17 +337,17 @@
                         <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
                             <i class="fa-brands fa-discord"></i>
-                            <span>Discord</span>
+                            <span data-i18n="btn_discord">Discord</span>
                         </a>
                         <a href="https://rom.ym.games/en/" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
                             <i class="fa-solid fa-globe"></i>
-                            <span>Website</span>
+                            <span data-i18n="btn_website">Website</span>
                         </a>
                         <a href="https://load.yoodream.com/game?ch=NTY3MmJyNDQyYnI" target="_blank" rel="noopener noreferrer"
                            class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
                             <i class="fa-solid fa-download"></i>
-                            <span>Download</span>
+                            <span data-i18n="btn_download">Download</span>
                         </a>
                     </div>
                 </div>
@@ -400,9 +400,9 @@
                 <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
                     <div class="text-center lg:text-left max-w-2xl">
                         <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider text-white mb-4">
-                            JOIN THE <span class="text-brand-gold text-glow">COMMUNITY</span>
+                            <span data-i18n="join_the">JOIN THE</span> <span class="text-brand-gold text-glow" data-i18n="community">COMMUNITY</span>
                         </h2>
-                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
+                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed" data-i18n="discord_desc">
                             Connect with fellow players, get the latest updates, and get support from our community.
                         </p>
                     </div>
@@ -410,7 +410,7 @@
                         <a href="https://discord.gg/WBAmVQtfAa" target="_blank" rel="noopener noreferrer" 
                            class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-base uppercase px-8 py-5 rounded-2xl shadow-neon-gold transition-all">
                             <i class="fa-brands fa-discord text-2xl"></i>
-                            <span>Join Discord</span>
+                            <span data-i18n="btn_join_discord">Join Discord</span>
                         </a>
                     </div>
                 </div>
@@ -433,11 +433,279 @@
 
     <!-- Scripts -->
     <script>
-        // Mobile Menu
+        // Dictionary para sa multi-language translation
+        const translations = {
+            en: {
+                nav_home: "Home",
+                nav_games: "Games",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "THE ULTIMATE PRIVATE SERVER EXPERIENCE",
+                hero_desc: "Discover a new world of adventure, engage in epic guild wars, and conquer your enemies in the AEGIS & MMORPG Private Servers.",
+                btn_join_discord_comm: "Join Discord Community",
+                btn_view_games: "View Active Games",
+                featured_text: "FEATURED",
+                games_text: "GAMES",
+                games_subtitle: "Explore the best MMORPG private servers available under LEGEND AEGIS.",
+                status_coming_soon: "COMING SOON",
+                status_online: "ONLINE",
+                card1_desc: "Conquer the realm of NEW MIR4 LEGEND AEGIS through epic battles, fierce clan wars, and legendary sieges.",
+                card2_desc: "Conquer the realm of ASTRAL through epic battles and fierce competition. Build powerful communities.",
+                card3_desc: "Forge your destiny in the world of Majesty. Battle alongside your guild and build your legacy.",
+                btn_website: "Website",
+                btn_download: "Download",
+                join_the: "JOIN THE",
+                community: "COMMUNITY",
+                discord_desc: "Connect with fellow players, get the latest updates, and get support from our community.",
+                btn_join_discord: "Join Discord"
+            },
+            pt: {
+                nav_home: "Início",
+                nav_games: "Jogos",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "A EXPERIÊNCIA DEFINITIVA DE SERVIDOR PRIVADO",
+                hero_desc: "Descubra um novo mundo de aventura, participe de guerras de guildas épicas e conquiste seus inimigos nos servidores privados AEGIS & MMORPG.",
+                btn_join_discord_comm: "Entrar na Comunidade do Discord",
+                btn_view_games: "Ver Jogos Ativos",
+                featured_text: "DESTAQUE",
+                games_text: "JOGOS",
+                games_subtitle: "Explore os melhores servidores privados de MMORPG disponíveis sob LEGEND AEGIS.",
+                status_coming_soon: "EM BREVE",
+                status_online: "ONLINE",
+                card1_desc: "Conquiste o reino do NOVO MIR4 LEGEND AEGIS através de batalhas épicas, guerras de clãs ferozes e cercos lendários.",
+                card2_desc: "Conquiste o reino de ASTRAL através de batalhas épicas e competição acirrada. Construa comunidades poderosas.",
+                card3_desc: "Forje seu destino no mundo de Majesty. Batalhe ao lado de sua guilda e construa seu legado.",
+                btn_website: "Site",
+                btn_download: "Baixar",
+                join_the: "JUNTE-SE À",
+                community: "COMUNIDADE",
+                discord_desc: "Conecte-se com outros jogadores, obtenha as últimas atualizações e suporte da nossa comunidade.",
+                btn_join_discord: "Entrar no Discord"
+            },
+            zh: {
+                nav_home: "首页",
+                nav_games: "游戏",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "终极私服体验",
+                hero_desc: "在AEGIS和MMORPG私服中探索全新的冒险世界，参与史诗级的公会战，战胜你的敌人。",
+                btn_join_discord_comm: "加入Discord社区",
+                btn_view_games: "查看运行中的游戏",
+                featured_text: "精选",
+                games_text: "游戏",
+                games_subtitle: "探索LEGEND AEGIS旗下的最佳MMORPG私服。",
+                status_coming_soon: "敬请期待",
+                status_online: "在线",
+                card1_desc: "通过史诗般的战斗、激烈的行会战和传奇围攻，征服全新MIR4 LEGEND AEGIS的领域。",
+                card2_desc: "通过史诗般的战斗和激烈的竞争征服ASTRAL领域。建立强大的社区。",
+                card3_desc: "在Majesty的世界中铸造你的命运。与你的公会并肩作战，建立你的传奇。",
+                btn_website: "网站",
+                btn_download: "下载",
+                join_the: "加入",
+                community: "社区",
+                discord_desc: "与其他玩家交流，获取最新动态并获得社区支持。",
+                btn_join_discord: "加入Discord"
+            },
+            ph: {
+                nav_home: "Tahanan",
+                nav_games: "Mga Laro",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "ANG PINAKAMAHUSAY NA PRIVATE SERVER",
+                hero_desc: "Tumuklas ng bagong mundo ng pakikipagsapalaran, sumali sa mga digmaan ng guild, at talunin ang mga kalaban sa AEGIS at MMORPG Private Servers.",
+                btn_join_discord_comm: "Sumali sa Discord Community",
+                btn_view_games: "Tingnan ang mga Laro",
+                featured_text: "ITINATAMPOK NA",
+                games_text: "MGA LARO",
+                games_subtitle: "Tuklasin ang pinakamahusay na MMORPG private servers sa ilalim ng LEGEND AEGIS.",
+                status_coming_soon: "ABANGAN",
+                status_online: "ONLINE",
+                card1_desc: "Lupigin ang kaharian ng BAGONG MIR4 LEGEND AEGIS sa pamamagitan ng mga epikong labanan at digmaan ng mga lipi.",
+                card2_desc: "Lupigin ang kaharian ng ASTRAL sa pamamagitan ng mga epikong labanan at kumpetisyon. Bumuo ng malakas na komunidad.",
+                card3_desc: "Hubugin ang iyong tadhana sa mundo ng Majesty. Makipaglaban kasama ang iyong guild at buuin ang iyong legacy.",
+                btn_website: "Website",
+                btn_download: "I-download",
+                join_the: "SUMALI SA",
+                community: "KOMUNIDAD",
+                discord_desc: "Makipag-ugnayan sa kapwa manlalaro, alamin ang mga huling update, at humingi ng tulong sa komunidad.",
+                btn_join_discord: "Sumali sa Discord"
+            },
+            id: {
+                nav_home: "Beranda",
+                nav_games: "Game",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "PENGALAMAN SERVER PRIBADI TERBAIK",
+                hero_desc: "Temukan dunia petualangan baru, ikuti perang guild epik, dan taklukkan musuh Anda di Server Pribadi AEGIS & MMORPG.",
+                btn_join_discord_comm: "Gabung Komunitas Discord",
+                btn_view_games: "Lihat Game Aktif",
+                featured_text: "UNGGULAN",
+                games_text: "GAME",
+                games_subtitle: "Jelajahi server pribadi MMORPG terbaik yang tersedia di bawah LEGEND AEGIS.",
+                status_coming_soon: "SEGERA",
+                status_online: "ONLINE",
+                card1_desc: "Taklukkan dunia MIR4 LEGEND AEGIS BARU melalui pertempuran epik, perang klan sengit, dan pengepungan legendaris.",
+                card2_desc: "Taklukkan dunia ASTRAL melalui pertempuran epik dan persaingan ketat. Bangun komunitas yang kuat.",
+                card3_desc: "Tempa takdirmu di dunia Majesty. Berjuanglah bersama guildmu dan bangun warisanmu.",
+                btn_website: "Situs Web",
+                btn_download: "Unduh",
+                join_the: "GABUNG KE",
+                community: "KOMUNITAS",
+                discord_desc: "Terhubung dengan pemain lain, dapatkan pembaruan terkini, dan dapatkan dukungan dari komunitas kami.",
+                btn_join_discord: "Gabung Discord"
+            },
+            th: {
+                nav_home: "หน้าแรก",
+                nav_games: "เกม",
+                nav_discord: "ดิสคอร์ด",
+                btn_discord: "Discord",
+                hero_subtitle: "ประสบการณ์เซิร์ฟเวอร์ส่วนตัวที่ดีที่สุด",
+                hero_desc: "ค้นพบโลกแห่งการผจญภัยครั้งใหม่ เข้าร่วมสงครามกิลด์สุดอลังการ และพิชิตศัตรูของคุณใน AEGIS & MMORPG Private Servers",
+                btn_join_discord_comm: "เข้าร่วมชุมชน Discord",
+                btn_view_games: "ดูเกมที่เปิดให้บริการ",
+                featured_text: "แนะนำ",
+                games_text: "เกม",
+                games_subtitle: "สำรวจเซิร์ฟเวอร์ส่วนตัว MMORPG ที่ดีที่สุดภายใต้ LEGEND AEGIS",
+                status_coming_soon: "เร็วๆ นี้",
+                status_online: "ออนไลน์",
+                card1_desc: "พิชิตอาณาจักร NEW MIR4 LEGEND AEGIS ผ่านการต่อสู้สุดอลังการ สงครามแคลน และการปิดล้อมระดับตำนาน",
+                card2_desc: "พิชิตอาณาจักร ASTRAL ผ่านการต่อสู้ที่ดุเดือด สร้างคอมมูนิตี้ที่แข็งแกร่ง",
+                card3_desc: "สร้างชะตากรรมของคุณในโลกแห่ง Majesty ต่อสู้เคียงข้างกิลด์ของคุณและสร้างตำนาน",
+                btn_website: "เว็บไซต์",
+                btn_download: "ดาวน์โหลด",
+                join_the: "เข้าร่วม",
+                community: "ชุมชน",
+                discord_desc: "เชื่อมต่อกับผู้เล่นคนอื่นๆ รับข้อมูลอัปเดตล่าสุด และรับการสนับสนุนจากชุมชนของเรา",
+                btn_join_discord: "เข้าร่วม Discord"
+            },
+            vi: {
+                nav_home: "Trang chủ",
+                nav_games: "Trò chơi",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "TRẢI NGHIỆM MÁY CHỦ RIÊNG TƯ ĐỈNH CAO",
+                hero_desc: "Khám phá thế giới phiêu lưu mới, tham gia chiến tranh bang hội hoành tráng và chinh phục kẻ thù trong Máy chủ riêng AEGIS & MMORPG.",
+                btn_join_discord_comm: "Tham gia cộng đồng Discord",
+                btn_view_games: "Xem trò chơi đang hoạt động",
+                featured_text: "NỔI BẬT",
+                games_text: "TRÒ CHƠI",
+                games_subtitle: "Khám phá các máy chủ riêng MMORPG tốt nhất có sẵn dưới LEGEND AEGIS.",
+                status_coming_soon: "SẮP RA MẮT",
+                status_online: "TRỰC TUYẾN",
+                card1_desc: "Chinh phục vương quốc MIR4 LEGEND AEGIS MỚI thông qua các trận chiến hoành tráng, chiến tranh bang hội khốc liệt và các cuộc bao vây huyền thoại.",
+                card2_desc: "Chinh phục vương quốc ASTRAL thông qua các trận chiến hoành tráng và sự cạnh tranh khốc liệt. Xây dựng cộng đồng mạnh mẽ.",
+                card3_desc: "Tạo nên vận mệnh của bạn trong thế giới Majesty. Chiến đấu bên cạnh bang hội của bạn và xây dựng di sản của bạn.",
+                btn_website: "Trang web",
+                btn_download: "Tải về",
+                join_the: "THAM GIA",
+                community: "CỘNG ĐỒNG",
+                discord_desc: "Kết nối với những người chơi khác, nhận thông tin cập nhật mới nhất và nhận hỗ trợ từ cộng đồng của chúng tôi.",
+                btn_join_discord: "Tham gia Discord"
+            },
+            ru: {
+                nav_home: "Главная",
+                nav_games: "Игры",
+                nav_discord: "Discord",
+                btn_discord: "Discord",
+                hero_subtitle: "ЛУЧШИЙ ОПЫТ ПРИВАТНОГО СЕРВЕРА",
+                hero_desc: "Откройте для себя новый мир приключений, участвуйте в эпических войнах гильдий и побеждайте врагов на серверах AEGIS & MMORPG.",
+                btn_join_discord_comm: "Присоединиться к сообществу Discord",
+                btn_view_games: "Посмотреть игры",
+                featured_text: "ИЗБРАННЫЕ",
+                games_text: "ИГРЫ",
+                games_subtitle: "Изучите лучшие приватные серверы MMORPG под управлением LEGEND AEGIS.",
+                status_coming_soon: "СКОРО",
+                status_online: "В СЕТИ",
+                card1_desc: "Покорите мир НОВОГО MIR4 LEGEND AEGIS в эпических битвах, ожесточенных клановых войнах и легендарных осадах.",
+                card2_desc: "Покорите мир ASTRAL в эпических битвах и ожесточенной конкуренции. Создайте мощные сообщества.",
+                card3_desc: "Сформируйте свою судьбу в мире Majesty. Сражайтесь бок о бок со своей гильдией и создайте свое наследие.",
+                btn_website: "Веб-сайт",
+                btn_download: "Скачать",
+                join_the: "ПРИСОЕДИНЯЙТЕСЬ К",
+                community: "СООБЩЕСТВУ",
+                discord_desc: "Общайтесь с другими игроками, получайте последние обновления и поддержку от нашего сообщества.",
+                btn_join_discord: "Присоединиться к Discord"
+            },
+            ko: {
+                nav_home: "홈",
+                nav_games: "게임",
+                nav_discord: "디스코드",
+                btn_discord: "Discord",
+                hero_subtitle: "최고의 프라이빗 서버 경험",
+                hero_desc: "AEGIS & MMORPG 프라이빗 서버에서 새로운 모험의 세계를 발견하고, 치열한 길드전에 참여하며 적을 정복하세요.",
+                btn_join_discord_comm: "디스코드 커뮤니티 가입하기",
+                btn_view_games: "활성 게임 보기",
+                featured_text: "추천",
+                games_text: "게임",
+                games_subtitle: "LEGEND AEGIS에서 제공하는 최고의 MMORPG 프라이빗 서버를 살펴보세요.",
+                status_coming_soon: "출시 예정",
+                status_online: "온라인",
+                card1_desc: "서사적인 전투, 치열한 클랜전, 전설적인 공성전을 통해 신규 MIR4 LEGEND AEGIS의 영토를 정복하세요.",
+                card2_desc: "서사적인 전투와 치열한 경쟁을 통해 ASTRAL의 영토를 정복하고 강력한 커뮤니티를 구축하세요.",
+                card3_desc: "Majesty의 세계에서 당신의 운명을 개척하세요. 길드와 함께 싸우고 전설을 만드세요.",
+                btn_website: "웹사이트",
+                btn_download: "다운로드",
+                join_the: "함께해요",
+                community: "커뮤니티",
+                discord_desc: "다른 플레이어들과 소통하고, 최신 업데이트를 확인하며, 커뮤니티의 지원을 받으세요.",
+                btn_join_discord: "디스코드 참여하기"
+            }
+        };
+
+        // Mobile Navigation Menu Toggle
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         if (menuBtn && mobileMenu) {
             menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        }
+
+        // Language Dropdown Toggle and Selection
+        const langBtn = document.getElementById('lang-menu-btn');
+        const langDropdown = document.getElementById('lang-dropdown');
+        const currentLangSpan = document.getElementById('current-lang');
+
+        if (langBtn && langDropdown) {
+            langBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                langDropdown.classList.toggle('hidden');
+            });
+
+            window.addEventListener('click', () => {
+                if (!langDropdown.classList.contains('hidden')) {
+                    langDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        function setLanguage(lang) {
+            const langCodes = {
+                en: 'EN',
+                pt: 'PT',
+                zh: 'ZH',
+                ph: 'PH',
+                id: 'ID',
+                th: 'TH',
+                vi: 'VN',
+                ru: 'RU',
+                ko: 'KO'
+            };
+
+            if (currentLangSpan) {
+                currentLangSpan.innerText = langCodes[lang] || 'EN';
+            }
+
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            if (langDropdown) {
+                langDropdown.classList.add('hidden');
+            }
         }
 
         // Astral Download Modal
