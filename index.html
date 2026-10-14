@@ -1,1 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEGEND AEGIS - BEST PRIVATE GAMES</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            gold: '#F59E0B',
+                            amber: '#D97706',
+                            red: '#E50914',
+                            dark: '#0B0B0E',
+                            card: '#141419',
+                            cardHover: '#1A1A22',
+                            glow: '#FBBF24',
+                        }
+                    },
+                    boxShadow: {
+                        'neon-gold': '0 0 20px rgba(245, 158, 11, 0.4), 0 0 40px rgba(245, 158, 11, 0.1)',
+                        'neon-red': '0 0 20px rgba(229, 9, 20, 0.6), 0 0 40px rgba(229, 9, 20, 0.2)',
+                        'neon-hover': '0 0 30px rgba(251, 191, 36, 0.7), 0 0 60px rgba(245, 158, 11, 0.3)',
+                        'card-glow': '0 10px 30px -10px rgba(245, 158, 11, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0B0E;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-aegis {
+            background-image: linear-gradient(to bottom, rgba(11, 11, 14, 0.8), rgba(11, 11, 14, 0.95)), url('legendaegisbg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+        }
+
+        .logo-glow {
+            filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.5));
+            transition: filter 0.3s ease;
+        }
+
+        .logo-glow:hover {
+            filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.8));
+        }
+
+        .nav-glass {
+            background: rgba(11, 11, 14, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .game-art {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .esports-card:hover .game-art {
+            transform: scale(1.06);
+            filter: brightness(1.08);
+        }
+
+        .game-art-wrap {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            background: #101015;
+        }
+
+        .game-logo-art {
+            object-fit: contain;
+            padding: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-art-wrap::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(20, 20, 25, 0.95), rgba(20, 20, 25, 0.05) 65%);
+            pointer-events: none;
+        }
+
+        .game-status {
+            position: absolute;
+            z-index: 2;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .esports-card {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .esports-card:hover {
+            border-color: rgba(245, 158, 11, 0.8);
+            transform: translateY(-6px);
+        }
+    </style>
+</head>
+<body class="bg-aegis min-h-screen flex flex-col justify-between selection:bg-brand-gold selection:text-black">
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full z-50 nav-glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#home" class="flex items-center gap-3 group">
+                <img src="logo.png" alt="legendaegis Logo" class="h-12 w-auto object-contain logo-glow rounded">
+                <span class="font-heading font-black text-xl tracking-wider text-white group-hover:text-brand-gold transition-colors">
+                    LEGEND <span class="text-brand-gold">AEGIS</span>
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-6 font-heading text-sm uppercase tracking-wider">
+                <a href="#home" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_home">Home</a>
+                <a href="#games" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold">Games</a>
+                <a href="#discord" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_discord">Discord</a>
+
+                <!-- Language Dropdown -->
+                <div class="relative group">
+                    <button id="lang-menu-btn" class="flex items-center gap-1.5 text-gray-300 hover:text-brand-gold transition-colors py-2 px-3 border border-brand-gold/30 rounded-lg bg-brand-dark/50">
+                        <span id="current-lang">EN</span>
+                        <i class="fa-solid fa-caret-down text-xs"></i>
+                    </button>
+                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-brand-card border border-brand-gold/30 rounded-xl shadow-2xl py-2 z-50 flex flex-col font-sans text-sm">
+                        <a href="#" onclick="setLanguage('en'); return false;" class="px-4 py-2 text-brand-gold hover:bg-brand-cardHover font-bold transition-colors">English</a>
+                        <a href="#" onclick="setLanguage('pt'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Português</a>
+                        <a href="#" onclick="setLanguage('zh'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">简体中文</a>
+                        <a href="#" onclick="setLanguage('ph'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Filipino</a>
+                        <a href="#" onclick="setLanguage('id'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Bahasa Indonesia</a>
+                        <a href="#" onclick="setLanguage('th'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">ไทย</a>
+                        <a href="#" onclick="setLanguage('vi'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Tiếng Việt</a>
+                        <a href="#" onclick="setLanguage('ru'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Русский</a>
+                        <a href="#" onclick="setLanguage('ko'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">한국어</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="hidden sm:block">
+                <a href="https://discord.gg/WBAmVQtfAa" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading text-xs uppercase font-bold px-5 py-2.5 rounded-lg shadow-neon-gold hover:shadow-neon-hover transition-all duration-300 transform hover:-translate-y-0.5">
+                    <i class="fa-brands font-bold text-base fa-discord"></i>
+                    <span data-i18n="btn_discord">Discord</span>
+                </a>
+            </div>
+
+            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-brand-gold/30 px-4 pt-2 pb-6 space-y-3 font-heading uppercase text-sm">
+            <a href="#home" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_home">Home</a>
+            <a href="#games" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800">Games</a>
+            <a href="#discord" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_discord">Discord</a>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-[90vh] flex items-center justify-center text-center px-4 py-20">
+            <div class="max-w-4xl mx-auto flex flex-col items-center">
+                <div class="relative mb-6 group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-gold to-amber-600 rounded-full blur-xl opacity-40 group-hover:opacity-70 transition duration-500"></div>
+                    <img src="logo.png" alt="AEGIS Logo" class="relative w-48 h-48 sm:w-64 sm:h-64 object-contain rounded-2xl shadow-2xl logo-glow">
+                </div>
+
+                <h1 class="font-heading font-black text-4xl sm:text-6xl md:text-7xl tracking-wider uppercase mb-3 text-white">
+                    LEGEND <span class="text-brand-gold text-glow">AEGIS</span>
+                </h1>
+                
+                <p class="font-heading font-semibold text-lg sm:text-2xl tracking-widest text-gray-300 mb-8 uppercase flex items-center gap-3">
+                    <span class="h-0.5 w-8 bg-brand-gold inline-block"></span>
+                    <span data-i18n="hero_subtitle">THE ULTIMATE PRIVATE SERVER EXPERIENCE</span>
+                    <span class="h-0.5 w-8 bg-brand-gold inline-block"></span>
+                </p>
+
+                <p class="text-gray-400 max-w-2xl text-base sm:text-lg mb-10 leading-relaxed" data-i18n="hero_desc">
+                    Discover a new world of adventure, engage in epic guild wars, and conquer your enemies in the AEGIS & MMORPG Private Servers.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <a href="https://discord.gg/WBAmVQtfAa" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl shadow-neon-gold hover:shadow-neon-hover transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fa-brands fa-discord text-xl"></i>
+                        <span>Join Discord Community</span>
+                    </a>
+                    <a href="#games" 
+                       class="inline-flex items-center justify-center gap-2 bg-brand-card hover:bg-brand-cardHover text-white font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
+                        <i class="fa-solid fa-gamepad text-brand-gold"></i>
+                        <span>View Active Games</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games List Section -->
+        <section id="games" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider mb-4">
+                    FEATURED <span class="text-brand-gold text-glow">GAMES</span>
+                </h2>
+                <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
+                    Explore the best MMORPG private servers available under LEGEND AEGIS.
+                </p>
+                <div class="w-24 h-1 bg-brand-gold mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto items-stretch">
+                <!-- Game Card 1: MIR4 LEGEND AEGIS -->
+                <div class="esports-card bg-brand-card rounded-2xl overflow-hidden group shadow-card-glow flex flex-col h-full">
+                    <div>
+                        <div class="game-art-wrap">
+                            <img src="logo.png" alt="LEGEND AEGIS" class="game-art game-logo-art">
+                            <span class="game-status bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold">
+                                COMING SOON
+                            </span>
+                        </div>
+                        <div class="px-8 pt-6 pb-2">
+                            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">MIR4 PRIVATE SERVER</p>
+                            <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">LEGEND AEGIS</h3>
+                        </div>
+                        <div class="p-8">
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                                Conquer the realm of NEW MIR4 LEGEND AEGIS through epic battles, fierce clan wars, and legendary sieges.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-8 mt-auto flex flex-col gap-3">
+                        <a href="https://discord.gg/g22pR3ttTN" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
+                            <i class="fa-brands fa-discord"></i>
+                            <span>Discord</span>
+                        </a>
+                        <a href="https://www.legend-aegis.com" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
+                            <i class="fa-solid fa-globe"></i>
+                            <span>Website</span>
+                        </a>
+                        <button type="button" data-coming-soon="MIR4 AEGIS Download"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Card 2: ASTRAL -->
+                <div class="esports-card bg-brand-card rounded-2xl overflow-hidden group shadow-card-glow flex flex-col h-full">
+                    <div>
+                        <div class="game-art-wrap">
+                            <img src="ASTRAL.png" alt="ASTRAL" class="game-art game-logo-art">
+                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold">
+                                ONLINE
+                            </span>
+                        </div>
+                        <div class="px-8 pt-6 pb-2">
+                            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">PLAY-ASTRAL</p>
+                            <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">ASTRAL</h3>
+                        </div>
+                        <div class="p-8">
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                                Conquer the realm of ASTRAL through epic battles and fierce competition. Build powerful communities.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-8 mt-auto flex flex-col gap-3">
+                        <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
+                            <i class="fa-brands fa-discord"></i>
+                            <span>Discord</span>
+                        </a>
+                        <a href="https://www.play-astral.com" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
+                            <i class="fa-solid fa-globe"></i>
+                            <span>Website</span>
+                        </a>
+                        <button type="button" id="astral-download-btn"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Card 3: ROM REMEMBER OF MAJESTY -->
+                <div class="esports-card bg-brand-card rounded-2xl overflow-hidden group shadow-card-glow flex flex-col h-full">
+                    <div>
+                        <div class="game-art-wrap">
+                            <img src="ROM.png" alt="ROM: Remember of Majesty" class="game-art game-logo-art">
+                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold">
+                                ONLINE
+                            </span>
+                        </div>
+                        <div class="px-8 pt-6 pb-2">
+                            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">ROM PRIVATE SERVER</p>
+                            <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">ROM: REMEMBER OF MAJESTY</h3>
+                        </div>
+                        <div class="p-8">
+                            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                                Forge your destiny in the world of Majesty. Battle alongside your guild and build your legacy.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-8 mt-auto flex flex-col gap-3">
+                        <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
+                            <i class="fa-brands fa-discord"></i>
+                            <span>Discord</span>
+                        </a>
+                        <a href="https://rom.ym.games/en/" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
+                            <i class="fa-solid fa-globe"></i>
+                            <span>Website</span>
+                        </a>
+                        <a href="https://load.yoodream.com/game?ch=NTY3MmJyNDQyYnI" target="_blank" rel="noopener noreferrer"
+                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Astral Download Options Modal -->
+        <div id="astral-download-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4" aria-hidden="true">
+            <div id="astral-download-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+            <div id="astral-download-panel" class="relative w-full max-w-lg bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold overflow-hidden transform transition-all duration-300 scale-95 opacity-0">
+                <div class="relative px-6 py-5 border-b border-white/10 bg-gradient-to-r from-brand-card via-gray-900 to-brand-card">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-heading text-brand-gold uppercase tracking-[0.25em] font-bold mb-1">ASTRAL</p>
+                            <h2 class="font-heading font-black text-2xl uppercase tracking-wider text-white">Choose Your Platform</h2>
+                        </div>
+                        <button type="button" id="astral-download-close" class="w-10 h-10 shrink-0 rounded-xl bg-white/5 hover:bg-brand-gold/20 text-gray-400 hover:text-white transition-colors">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6 grid grid-cols-1 gap-3">
+                    <a href="https://www.mediafire.com/file_premium/rgoqvbosdsq2neb/Play-Astral.rar/file" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 rounded-xl border border-gray-700 bg-black/20 hover:border-brand-gold hover:bg-brand-gold/10 p-4 transition-all">
+                        <span class="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-300 flex items-center justify-center text-2xl"><i class="fa-brands fa-windows"></i></span>
+                        <span class="flex-1"><span class="block font-heading font-bold uppercase text-white">Windows PC</span><span class="block text-sm text-gray-400 mt-1">Download PC client (.RAR)</span></span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-gray-500"></i>
+                    </a>
+                    <a href="https://www.mediafire.com/file_premium/gyxwkgtapbd70kt/Play-Astral.apk/file" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 rounded-xl border border-gray-700 bg-black/20 hover:border-brand-gold hover:bg-brand-gold/10 p-4 transition-all">
+                        <span class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-300 flex items-center justify-center text-2xl"><i class="fa-brands fa-android"></i></span>
+                        <span class="flex-1"><span class="block font-heading font-bold uppercase text-white">Android</span><span class="block text-sm text-gray-400 mt-1">Download APK</span></span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-gray-500"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coming Soon Modal -->
+        <div id="coming-soon-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4" aria-hidden="true">
+            <div id="coming-soon-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+            <div id="coming-soon-panel" class="relative w-full max-w-md bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold overflow-hidden p-6 text-center">
+                <p class="text-xs font-heading text-brand-gold uppercase font-bold mb-2">MIR4 AEGIS</p>
+                <h2 id="coming-soon-title" class="font-heading font-black text-2xl text-white">Coming Soon</h2>
+                <button type="button" id="coming-soon-close" class="mt-6 w-full bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-3.5 rounded-xl">Got It</button>
+            </div>
+        </div>
+
+        <!-- Discord Community Banner -->
+        <section id="discord" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="relative bg-gradient-to-r from-brand-card via-gray-900 to-brand-card border border-brand-gold/40 rounded-3xl p-8 sm:p-14 overflow-hidden shadow-2xl">
+                <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <div class="text-center lg:text-left max-w-2xl">
+                        <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider text-white mb-4">
+                            JOIN THE <span class="text-brand-gold text-glow">COMMUNITY</span>
+                        </h2>
+                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed">
+                            Connect with fellow players, get the latest updates, and get support from our community.
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto shrink-0">
+                        <a href="https://discord.gg/WBAmVQtfAa" target="_blank" rel="noopener noreferrer" 
+                           class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-base uppercase px-8 py-5 rounded-2xl shadow-neon-gold transition-all">
+                            <i class="fa-brands fa-discord text-2xl"></i>
+                            <span>Join Discord</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark/90 border-t border-gray-800/80 py-10 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div class="flex items-center gap-3">
+                <img src="logo.png" alt="AEGIS Logo Small" class="h-10 w-auto rounded logo-glow">
+                <div>
+                    <span class="font-heading font-bold text-lg text-white tracking-wider block">LEGEND AEGIS</span>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500">&copy; 2026 LEGEND AEGIS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        }
+
+        // Astral Download Modal
+        const astralDownloadModal = document.getElementById('astral-download-modal');
+        const astralDownloadPanel = document.getElementById('astral-download-panel');
+        const astralDownloadBtn = document.getElementById('astral-download-btn');
+        const astralDownloadClose = document.getElementById('astral-download-close');
+        const astralDownloadBackdrop = document.getElementById('astral-download-backdrop');
+
+        function openDownloadModal() {
+            astralDownloadModal.classList.remove('hidden');
+            astralDownloadModal.classList.add('flex');
+            setTimeout(() => {
+                astralDownloadPanel.classList.remove('scale-95', 'opacity-0');
+                astralDownloadPanel.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeDownloadModal() {
+            astralDownloadPanel.classList.remove('scale-100', 'opacity-100');
+            astralDownloadPanel.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                astralDownloadModal.classList.remove('flex');
+                astralDownloadModal.classList.add('hidden');
+            }, 250);
+        }
+
+        if (astralDownloadBtn) astralDownloadBtn.addEventListener('click', openDownloadModal);
+        if (astralDownloadClose) astralDownloadClose.addEventListener('click', closeDownloadModal);
+        if (astralDownloadBackdrop) astralDownloadBackdrop.addEventListener('click', closeDownloadModal);
+
+        // Coming Soon Modal
+        const comingSoonModal = document.getElementById('coming-soon-modal');
+        const comingSoonClose = document.getElementById('coming-soon-close');
+        const comingSoonBackdrop = document.getElementById('coming-soon-backdrop');
+
+        function openComingSoon() {
+            comingSoonModal.classList.remove('hidden');
+            comingSoonModal.classList.add('flex');
+        }
+        function closeComingSoon() {
+            comingSoonModal.classList.add('hidden');
+            comingSoonModal.classList.remove('flex');
+        }
+
+        document.querySelectorAll('[data-coming-soon]').forEach(button => {
+            button.addEventListener('click', openComingSoon);
+        });
+        if (comingSoonClose) comingSoonClose.addEventListener('click', closeComingSoon);
+        if (comingSoonBackdrop) comingSoonBackdrop.addEventListener('click', closeComingSoon);
+    </script>
+</body>
+</html>
