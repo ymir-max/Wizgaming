@@ -14,15 +14,20 @@ const ALLOWED_GAMES = [
   "ROM: REMEMBER OF MAJESTY"
 ];
 
-// Tinatanggap ang values ng kasalukuyang HTML form.
+// Tinatanggap ang values mula sa HTML payment form.
 const PAYMENT_METHOD_MAP = {
-  GCASH: "ewallet",
-  MAYA: "ewallet",
-  "BANK TRANSFER": "bank_transfer",
+  "GCASH / MAYA": "ewallet",
+  "GCASH": "ewallet",
+  "MAYA": "ewallet",
   "QR PH": "qr_ph",
-  ewallet: "ewallet",
-  bank_transfer: "bank_transfer",
-  qr_ph: "qr_ph"
+  "BANK": "bank_transfer",
+  "BANK TRANSFER": "bank_transfer",
+  "USDT": "binance_usdt",
+  "BINANCE USDT": "binance_usdt",
+  "EWALLET": "ewallet",
+  "QR_PH": "qr_ph",
+  "BANK_TRANSFER": "bank_transfer",
+  "BINANCE_USDT": "binance_usdt"
 };
 
 function getRequiredEnv(name) {
@@ -68,7 +73,6 @@ export default async function handler(req, res) {
     const apiKey = getRequiredEnv("HITPAY_API_KEY");
     supabase = getSupabase();
 
-    // Support JSON request bodies.
     let body = req.body || {};
 
     if (typeof body === "string") {
@@ -79,36 +83,58 @@ export default async function handler(req, res) {
       }
     }
 
-    const {
-      game_name,
-      game_username,
-      customer_email,
-      game_cash,
-      payment_method
-    } = body;
+    // Support sa kasalukuyang HTML form field names
+    // at sa mga pangalan na ginagamit ng API.
+    const gameNameInput =
+      body.game_name ?? body.game ?? "";
 
-    const submittedGame = String(game_name || "").trim().toUpperCase();
-    const gameUsername = String(game_username || "").trim();
-    const email = String(customer_email || "").trim();
-    const cash = Number(game_cash);
+    const gameUsernameInput =
+      body.game_username ?? body.username ?? "";
 
-    const submittedMethod = String(payment_method || "")
+    const emailInput =
+      body.customer_email ?? body.email ?? "";
+
+    const cashInput =
+      body.game_cash ?? body.amount;
+
+    const paymentMethodInput =
+      body.payment_method ?? "";
+
+    const submittedGame = String(gameNameInput)
       .trim()
       .toUpperCase();
+
+    const gameUsername = String(gameUsernameInput).trim();
+    const email = String(emailInput).trim();
+    const cash = Number(cashInput);
+
+    const submittedMethod = String(paymentMethodInput)
+      .trim()
+      .toUpperCase();
+
+    const method = PAYMENT_METHOD_MAP[submittedMethod];
 
     if (!ALLOWED_GAMES.includes(submittedGame)) {
       return sendError(res, 400, "Please select a valid game.");
     }
 
     if (!gameUsername || gameUsername.length > 100) {
-      return sendError(res, 400, "Please enter a valid game username.");
+      return sendError(
+        res,
+        400,
+        "Please enter a valid in-game username."
+      );
     }
 
     if (
       email.length > 254 ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     ) {
-      return sendError(res, 400, "Please enter a valid email address.");
+      return sendError(
+        res,
+        400,
+        "Please enter a valid email address."
+      );
     }
 
     if (
@@ -120,21 +146,24 @@ export default async function handler(req, res) {
       return sendError(
         res,
         400,
-        "Game Cash must be between 50 and 5000 in increments of 50."
+        "Game Cash must be 50–5000 in increments of 50."
       );
     }
 
-    const method = PAYMENT_METHOD_MAP[submittedMethod];
-
     if (!method) {
-      return sendError(res, 400, "Please select a valid payment method.");
+      return sendError(
+        res,
+        400,
+        "Please select a valid payment method."
+      );
     }
 
-    // Store ROM under a consistent game name.
+    // Normalize the game name before saving.
     const gameName = submittedGame.startsWith("ROM")
       ? "ROM"
       : submittedGame;
 
+    // Server-side price calculation.
     const priceUSD = Number(
       (cash * USD_PER_GAME_CASH).toFixed(2)
     );
@@ -143,11 +172,11 @@ export default async function handler(req, res) {
       (priceUSD * PHP_PER_USD).toFixed(2)
     );
 
-    // Correctly formatted order number.
+    // Generate a unique order number.
     const orderNumber =
       `WIZ-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
 
-    // Step 1: Create a pending order in Supabase.
+    // STEP 1: Save the pending order in Supabase.
     const { data: order, error: insertError } = await supabase
       .from("game_recharge_orders")
       .insert({
@@ -181,12 +210,12 @@ export default async function handler(req, res) {
 
     orderId = order.id;
 
-    // Step 2: Request a HitPay checkout.
-    // HitPay will display the payment methods enabled for your account.
+    // STEP 2: Create the HitPay checkout.
+    // The final payment methods depend on your HitPay account.
     const paymentPayload = {
       amount: pricePHP.toFixed(2),
       currency: "PHP",
-      email,
+      email: email,
       purpose: `WIZ GAMING ${gameName} - ${cash} Game Cash`,
       reference_number: orderNumber,
       redirect_url: "https://wizgaming.vercel.app/?payment=return"
@@ -207,12 +236,12 @@ export default async function handler(req, res) {
 
     const responseText = await hitpayResponse.text();
 
-    let hitpayData;
+    let hitpayData = {};
 
     try {
       hitpayData = JSON.parse(responseText);
     } catch {
-      hitpayData = {};
+      // Handled below if HitPay returns an unexpected response.
     }
 
     if (!hitpayResponse.ok) {
@@ -237,7 +266,8 @@ export default async function handler(req, res) {
     }
 
     const paymentRequestId = hitpayData.id;
-    const checkoutUrl = hitpayData.url || hitpayData.checkout_url;
+    const checkoutUrl =
+      hitpayData.url || hitpayData.checkout_url;
 
     if (
       !paymentRequestId ||
@@ -263,7 +293,7 @@ export default async function handler(req, res) {
       );
     }
 
-    // Step 3: Save the checkout details.
+    // STEP 3: Save the HitPay checkout information.
     const { error: updateError } = await supabase
       .from("game_recharge_orders")
       .update({
@@ -282,11 +312,11 @@ export default async function handler(req, res) {
       return sendError(
         res,
         500,
-        "Your checkout was created, but we could not finish saving the order. Contact support before trying again."
+        "Checkout was created, but saving the checkout details failed. Contact support before retrying."
       );
     }
 
-    // Step 4: Return the checkout URL to the frontend.
+    // STEP 4: Send the checkout URL to the frontend.
     return res.status(200).json({
       success: true,
       order_id: order.id,
@@ -300,7 +330,6 @@ export default async function handler(req, res) {
       checkout_url: checkoutUrl
     });
   } catch (error) {
-    // Keep detailed errors in server logs, not in the public response.
     console.error("Create order error:", {
       message: error?.message,
       stack: error?.stack
@@ -309,7 +338,7 @@ export default async function handler(req, res) {
     return sendError(
       res,
       500,
-      "A server error occurred while creating your order. Please try again."
+      "A server error occurred while creating your order."
     );
   }
 }
