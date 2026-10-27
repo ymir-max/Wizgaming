@@ -1,914 +1,685 @@
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WIZ GAMING</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Orbitron & Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B0B0E">
+  <title>WIZ GAMING | Game Recharge & MMORPG</title>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Orbitron', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            gold: '#F59E0B',
-                            amber: '#D97706',
-                            red: '#E50914',
-                            dark: '#0B0B0E',
-                            card: '#141419',
-                            cardHover: '#1A1A22',
-                            glow: '#FBBF24',
-                        }
-                    },
-                    boxShadow: {
-                        'neon-gold': '0 0 20px rgba(245, 158, 11, 0.4), 0 0 40px rgba(245, 158, 11, 0.1)',
-                        'neon-red': '0 0 20px rgba(229, 9, 20, 0.6), 0 0 40px rgba(229, 9, 20, 0.2)',
-                        'neon-hover': '0 0 30px rgba(251, 191, 36, 0.7), 0 0 60px rgba(245, 158, 11, 0.3)',
-                        'card-glow': '0 10px 30px -10px rgba(245, 158, 11, 0.2)',
-                    }
-                }
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Orbitron', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              gold: '#F59E0B',
+              amber: '#D97706',
+              red: '#E50914',
+              dark: '#0B0B0E',
+              card: '#141419',
+              cardHover: '#1A1A22',
+              glow: '#FBBF24'
             }
+          },
+          boxShadow: {
+            'neon-gold': '0 0 20px rgba(245,158,11,.4)',
+            'card-glow': '0 10px 30px -10px rgba(245,158,11,.2)'
+          }
         }
-    </script>
+      }
+    };
+  </script>
 
-    <style>
-        body {
-            background-color: #0B0B0E;
-            color: #FFFFFF;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
-        .bg-aegis {
-            background-image: linear-gradient(to bottom, rgba(11, 11, 14, 0.8), rgba(11, 11, 14, 0.95)), url('background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        .text-glow {
-            text-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
-        }
-
-        .logo-glow {
-            filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.5));
-            transition: filter 0.3s ease;
-        }
-
-        .logo-glow:hover {
-            filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.8));
-        }
-
-        .nav-glass {
-            background: rgba(11, 11, 14, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
-        }
-
-        .game-art {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            transition: transform 0.5s ease, filter 0.5s ease;
-        }
-
-        .esports-card:hover .game-art {
-            transform: scale(1.06);
-            filter: brightness(1.08);
-        }
-
-        .game-art-wrap {
-            height: 220px;
-            position: relative;
-            overflow: hidden;
-            background: #101015;
-        }
-
-        .game-logo-art {
-            object-fit: contain;
-            padding: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .game-art-wrap::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(20, 20, 25, 0.95), rgba(20, 20, 25, 0.05) 65%);
-            pointer-events: none;
-        }
-
-        .game-status {
-            position: absolute;
-            z-index: 2;
-            top: 1rem;
-            right: 1rem;
-        }
-
-        .esports-card {
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .esports-card:hover {
-            border-color: rgba(245, 158, 11, 0.8);
-            transform: translateY(-6px);
-        }
-    </style>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      background: #0B0B0E;
+      color: #fff;
+      font-family: Inter, sans-serif;
+      overflow-x: hidden;
+    }
+    .bg-aegis {
+      background-image:
+        linear-gradient(to bottom,rgba(11,11,14,.88),rgba(11,11,14,.97)),
+        url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .text-glow { text-shadow: 0 0 15px rgba(245,158,11,.6); }
+    .logo-glow { filter: drop-shadow(0 0 15px rgba(245,158,11,.5)); }
+    .nav-glass {
+      background: rgba(11,11,14,.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(245,158,11,.2);
+    }
+    .esports-card {
+      border: 1px solid rgba(255,255,255,.08);
+      transition: .3s ease;
+    }
+    .esports-card:hover {
+      border-color: rgba(245,158,11,.8);
+      transform: translateY(-5px);
+    }
+    .game-art-wrap {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      background: #101015;
+    }
+    .game-art {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .game-logo-art { object-fit: contain; padding: 1rem; }
+    .esports-card:hover .game-art { transform: scale(1.05); }
+    .game-art-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top,rgba(20,20,25,.8),transparent 65%);
+      pointer-events: none;
+    }
+    .game-status { position: absolute; z-index: 2; top: 1rem; right: 1rem; }
+    .modal-backdrop { background: rgba(0,0,0,.86); backdrop-filter: blur(5px); }
+    .form-control {
+      width: 100%;
+      border: 1px solid #3f3f46;
+      border-radius: .75rem;
+      background: rgba(0,0,0,.4);
+      color: white;
+      padding: .85rem 1rem;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: #F59E0B;
+      box-shadow: 0 0 0 1px #F59E0B;
+    }
+    .form-control option { background: #141419; color: white; }
+    .payment-choice input:checked + span {
+      border-color: #F59E0B;
+      background: rgba(245,158,11,.12);
+      color: #FBBF24;
+    }
+    .payment-choice span {
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      border: 1px solid #3f3f46;
+      border-radius: .75rem;
+      background: rgba(0,0,0,.2);
+      padding: .75rem;
+      text-align: center;
+      transition: .2s ease;
+    }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    [hidden] { display: none !important; }
+  </style>
 </head>
-<body class="bg-aegis min-h-screen flex flex-col justify-between selection:bg-brand-gold selection:text-black">
 
-    <!-- Navigation Bar -->
-    <header class="fixed top-0 left-0 w-full z-50 nav-glass">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#home" class="flex items-center gap-3 group">
-                <img src="WizWeb.png" alt="wizgaming Logo" class="h-12 w-auto object-contain logo-glow rounded">
-                <span class="font-heading font-black text-xl tracking-wider text-white group-hover:text-brand-gold transition-colors">
-                    WIZ <span class="text-brand-gold">GAMING</span>
-                </span>
-            </a>
+<body class="bg-aegis min-h-screen flex flex-col selection:bg-brand-gold selection:text-black">
 
-            <nav class="hidden md:flex items-center space-x-6 font-heading text-sm uppercase tracking-wider">
-                <a href="#home" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_home">Home</a>
-                <a href="#games" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_games">Games</a>
-                <a href="#discord" class="text-gray-300 hover:text-brand-gold transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold" data-i18n="nav_discord">Discord</a>
-                <button type="button" id="game-recharge-nav" class="text-brand-gold hover:text-amber-300 transition-colors py-2 border-b-2 border-transparent hover:border-brand-gold">Game Recharge</button>
+  <!-- NAVIGATION -->
+  <header class="fixed top-0 left-0 w-full z-50 nav-glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="#home" class="flex items-center gap-3">
+        <img src="WizWeb.png" alt="WIZ GAMING" class="h-12 w-auto object-contain logo-glow">
+        <span class="font-heading font-black text-xl tracking-wider">WIZ <span class="text-brand-gold">GAMING</span></span>
+      </a>
 
-                <!-- Language Dropdown -->
-                <div class="relative group">
-                    <button id="lang-menu-btn" class="flex items-center gap-1.5 text-gray-300 hover:text-brand-gold transition-colors py-2 px-3 border border-brand-gold/30 rounded-lg bg-brand-dark/50">
-                        <span id="current-lang">EN</span>
-                        <i class="fa-solid fa-caret-down text-xs"></i>
-                    </button>
-                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-44 bg-brand-card border border-brand-gold/30 rounded-xl shadow-2xl py-2 z-50 flex flex-col font-sans text-sm">
-                        <a href="#" onclick="setLanguage('en'); return false;" class="px-4 py-2 text-brand-gold hover:bg-brand-cardHover font-bold transition-colors">English</a>
-                        <a href="#" onclick="setLanguage('pt'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Português</a>
-                        <a href="#" onclick="setLanguage('zh'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">简体中文</a>
-                        <a href="#" onclick="setLanguage('ph'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Filipino</a>
-                        <a href="#" onclick="setLanguage('id'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Bahasa Indonesia</a>
-                        <a href="#" onclick="setLanguage('th'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">ไทย</a>
-                        <a href="#" onclick="setLanguage('vi'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Tiếng Việt</a>
-                        <a href="#" onclick="setLanguage('ru'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">Русский</a>
-                        <a href="#" onclick="setLanguage('ko'); return false;" class="px-4 py-2 text-gray-300 hover:text-brand-gold hover:bg-brand-cardHover transition-colors">한국어</a>
-                    </div>
-                </div>
-            </nav>
+      <nav class="hidden md:flex items-center gap-6 font-heading text-xs uppercase tracking-wider">
+        <a href="#home" class="text-gray-300 hover:text-brand-gold">Home</a>
+        <a href="#games" class="text-gray-300 hover:text-brand-gold">Games</a>
+        <a href="#discord" class="text-gray-300 hover:text-brand-gold">Discord</a>
+        <button type="button" class="open-recharge text-brand-gold hover:text-amber-300">Game Recharge</button>
 
-            <div class="hidden sm:block">
-                <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer" 
-                   class="inline-flex items-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading text-xs uppercase font-bold px-5 py-2.5 rounded-lg shadow-neon-gold hover:shadow-neon-hover transition-all duration-300 transform hover:-translate-y-0.5">
-                    <i class="fa-brands font-bold text-base fa-discord"></i>
-                    <span data-i18n="btn_discord">Discord</span>
-                </a>
-            </div>
+        <div class="relative">
+          <button id="lang-menu-btn" type="button" class="border border-brand-gold/30 rounded-lg px-3 py-2 text-gray-300">
+            <span id="current-lang">EN</span> <i class="fa-solid fa-caret-down"></i>
+          </button>
+          <div id="lang-dropdown" class="hidden absolute right-0 top-full mt-2 w-44 bg-brand-card border border-brand-gold/30 rounded-xl py-2 shadow-xl z-50">
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="en">English</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="ph">Filipino</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="pt">Português</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="zh">简体中文</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="id">Bahasa Indonesia</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="th">ไทย</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="vi">Tiếng Việt</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="ru">Русский</button>
+            <button class="lang-option block w-full text-left px-4 py-2 hover:bg-white/5" data-lang="ko">한국어</button>
+          </div>
+        </div>
+      </nav>
 
-            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2">
-                <i class="fa-solid fa-bars text-2xl"></i>
-            </button>
+      <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer"
+         class="hidden sm:inline-flex items-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading text-xs font-bold px-5 py-3 rounded-lg shadow-neon-gold">
+        <i class="fa-brands fa-discord"></i> Discord
+      </a>
+
+      <button id="mobile-menu-btn" type="button" class="md:hidden p-2 text-2xl" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-brand-gold/30 px-4 py-4 space-y-4 font-heading text-sm uppercase">
+      <a href="#home" class="block">Home</a>
+      <a href="#games" class="block">Games</a>
+      <a href="#discord" class="block">Discord</a>
+      <button type="button" class="open-recharge block text-brand-gold">Game Recharge</button>
+      <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer" class="block">Join Discord</a>
+    </div>
+  </header>
+
+  <main class="flex-grow pt-20">
+    <!-- HERO -->
+    <section id="home" class="relative min-h-[85vh] flex items-center justify-center text-center px-4 py-20">
+      <div class="max-w-4xl mx-auto flex flex-col items-center">
+        <div class="relative mb-6">
+          <div class="absolute -inset-2 bg-gradient-to-r from-brand-gold to-amber-600 rounded-full blur-xl opacity-30"></div>
+          <img src="WizWeb.png" alt="WIZ GAMING Logo" class="relative w-48 h-48 sm:w-64 sm:h-64 object-contain logo-glow">
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-brand-gold/30 px-4 pt-2 pb-6 space-y-3 font-heading uppercase text-sm">
-            <a href="#home" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_home">Home</a>
-            <a href="#games" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_games">Games</a>
-            <a href="#discord" class="block py-2 text-gray-300 hover:text-brand-gold border-b border-gray-800" data-i18n="nav_discord">Discord</a>
-            <button type="button" id="game-recharge-mobile" class="block w-full text-left py-2 text-brand-gold hover:text-amber-300 border-b border-gray-800">Game Recharge</button>
+        <h1 class="font-heading font-black text-4xl sm:text-6xl md:text-7xl uppercase mb-4">
+          WIZ <span class="text-brand-gold text-glow">GAMING</span>
+        </h1>
+        <p class="font-heading font-semibold text-sm sm:text-xl tracking-widest text-gray-300 mb-8 uppercase">
+          <span class="text-brand-gold">—</span> Your Trusted Gaming Agent & Middleman <span class="text-brand-gold">—</span>
+        </p>
+        <p class="text-gray-400 max-w-2xl text-base sm:text-lg mb-10 leading-relaxed">
+          Discover top MMORPG games, fast and secure game recharges, and trusted middleman services for all players.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl shadow-neon-gold">
+            <i class="fa-brands fa-discord text-xl"></i> Join Discord Community
+          </a>
+          <button type="button" class="open-recharge inline-flex items-center justify-center gap-2 bg-brand-card hover:bg-brand-cardHover text-white font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl border border-gray-700 hover:border-brand-gold">
+            <i class="fa-solid fa-bolt text-brand-gold"></i> Recharge Game Cash
+          </button>
+          <a href="#games" class="inline-flex items-center justify-center gap-2 bg-brand-card text-white font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl border border-gray-700 hover:border-brand-gold">
+            <i class="fa-solid fa-gamepad text-brand-gold"></i> View Games
+          </a>
         </div>
-    </header>
+      </div>
+    </section>
 
-    <main class="flex-grow pt-20">
-        <!-- Hero Section -->
-        <section id="home" class="relative min-h-[90vh] flex items-center justify-center text-center px-4 py-20">
-            <div class="max-w-4xl mx-auto flex flex-col items-center">
-                <div class="relative mb-6 group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-gold to-amber-600 rounded-full blur-xl opacity-40 group-hover:opacity-70 transition duration-500"></div>
-                    <img src="WizWeb.png" alt="Wiz Logo" class="relative w-48 h-48 sm:w-64 sm:h-64 object-contain rounded-2xl shadow-2xl logo-glow">
-                </div>
+    <!-- GAMES -->
+    <section id="games" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="text-center mb-14">
+        <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider mb-4">
+          Featured <span class="text-brand-gold text-glow">Games</span>
+        </h2>
+        <p class="text-gray-400 max-w-xl mx-auto">Explore MMORPG games available under WIZ GAMING.</p>
+        <div class="w-24 h-1 bg-brand-gold mx-auto mt-4 rounded-full"></div>
+      </div>
 
-                <h1 class="font-heading font-black text-4xl sm:text-6xl md:text-7xl tracking-wider uppercase mb-3 text-white">
-                    WIZ <span class="text-brand-gold text-glow">GAMING</span>
-                </h1>
-                
-                <p class="font-heading font-semibold text-lg sm:text-2xl tracking-widest text-gray-300 mb-8 uppercase flex items-center gap-3">
-                    <span class="h-0.5 w-8 bg-brand-gold inline-block"></span>
-                    <span data-i18n="hero_subtitle">YOUR TRUSTED GAMING AGENT & MIDDLEMAN</span>
-                    <span class="h-0.5 w-8 bg-brand-gold inline-block"></span>
-                </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <!-- LEGEND AEGIS -->
+        <article class="esports-card bg-brand-card rounded-2xl overflow-hidden shadow-card-glow flex flex-col">
+          <div class="game-art-wrap">
+            <img src="logo.png" alt="LEGEND AEGIS" class="game-art game-logo-art">
+            <span class="game-status bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-heading px-3 py-1 rounded-full">COMING SOON</span>
+          </div>
+          <div class="px-7 pt-6">
+            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">MIR4 PRIVATE SERVER</p>
+            <h3 class="font-heading font-black text-2xl text-white">LEGEND AEGIS</h3>
+            <p class="text-gray-400 text-sm mt-4 leading-relaxed">Conquer the realm of MIR4 through epic battles, fierce clan wars, and legendary sieges.</p>
+          </div>
+          <div class="p-6 mt-auto flex flex-col gap-3">
+            <a href="https://discord.gg/g22pR3ttTN" target="_blank" rel="noopener noreferrer" class="text-center bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-brands fa-discord mr-2"></i>Discord</a>
+            <a href="https://www.legend-aegis.com" target="_blank" rel="noopener noreferrer" class="text-center bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-solid fa-globe mr-2"></i>Website</a>
+            <button type="button" data-coming-soon="MIR4 AEGIS Download" class="bg-white/5 hover:bg-brand-gold/10 border border-gray-700 hover:border-brand-gold text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-solid fa-download mr-2"></i>Download</button>
+          </div>
+        </article>
 
-                <p class="text-gray-400 max-w-2xl text-base sm:text-lg mb-10 leading-relaxed" data-i18n="hero_desc">
-                    Discover top private server games, fast and secure game recharges, and safe middleman services for all players.
-                </p>
+        <!-- ASTRAL -->
+        <article class="esports-card bg-brand-card rounded-2xl overflow-hidden shadow-card-glow flex flex-col">
+          <div class="game-art-wrap">
+            <img src="ASTRAL.png" alt="ASTRAL" class="game-art game-logo-art">
+            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full">ONLINE</span>
+          </div>
+          <div class="px-7 pt-6">
+            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">PLAY-ASTRAL</p>
+            <h3 class="font-heading font-black text-2xl text-white">ASTRAL</h3>
+            <p class="text-gray-400 text-sm mt-4 leading-relaxed">Conquer the realm of ASTRAL through epic battles and fierce competition. Build powerful communities.</p>
+          </div>
+          <div class="p-6 mt-auto flex flex-col gap-3">
+            <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer" class="text-center bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-brands fa-discord mr-2"></i>Discord</a>
+            <a href="https://www.play-astral.com" target="_blank" rel="noopener noreferrer" class="text-center bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-solid fa-globe mr-2"></i>Website</a>
+            <button type="button" id="astral-download-btn" class="bg-white/5 hover:bg-brand-gold/10 border border-gray-700 hover:border-brand-gold text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-solid fa-download mr-2"></i>Download</button>
+          </div>
+        </article>
 
-                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                    <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer" 
-                       class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl shadow-neon-gold hover:shadow-neon-hover transition-all duration-300 transform hover:-translate-y-1">
-                        <i class="fa-brands fa-discord text-xl"></i>
-                        <span data-i18n="btn_join_discord_comm">Join Discord Community</span>
-                    </a>
-                    <a href="#games" 
-                       class="inline-flex items-center justify-center gap-2 bg-brand-card hover:bg-brand-cardHover text-white font-heading font-bold text-sm uppercase px-8 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
-                        <i class="fa-solid fa-gamepad text-brand-gold"></i>
-                        <span data-i18n="btn_view_games">View Active Games</span>
-                    </a>
-                </div>
-            </div>
-        </section>
+        <!-- ROM -->
+        <article class="esports-card bg-brand-card rounded-2xl overflow-hidden shadow-card-glow flex flex-col">
+          <div class="game-art-wrap">
+            <img src="ROM.png" alt="ROM Remember of Majesty" class="game-art game-logo-art">
+            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full">ONLINE</span>
+          </div>
+          <div class="px-7 pt-6">
+            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">ROM</p>
+            <h3 class="font-heading font-black text-2xl text-white">ROM: REMEMBER OF MAJESTY</h3>
+            <p class="text-gray-400 text-sm mt-4 leading-relaxed">Forge your destiny in the world of Majesty. Battle alongside your guild and build your legacy.</p>
+          </div>
+          <div class="p-6 mt-auto flex flex-col gap-3">
+            <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer" class="text-center bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-brands fa-discord mr-2"></i>Discord</a>
+            <a href="https://rom.ym.games/en/" target="_blank" rel="noopener noreferrer" class="text-center bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-solid fa-globe mr-2"></i>Website</a>
+            <a href="https://load.yoodream.com/game?ch=NTY3MmJyNDQyYnI" target="_blank" rel="noopener noreferrer" class="text-center bg-white/5 hover:bg-brand-gold/10 border border-gray-700 hover:border-brand-gold text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl"><i class="fa-solid fa-download mr-2"></i>Download</a>
+          </div>
+        </article>
+      </div>
+    </section>
 
-        <!-- Games List Section -->
-        <section id="games" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider mb-4">
-                    <span data-i18n="featured_text">FEATURED</span> <span class="text-brand-gold text-glow" data-i18n="games_text">GAMES</span>
-                </h2>
-                <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base" data-i18n="games_subtitle">
-                    Explore the best MMORPG private servers available under Wiz Gaming.
-                </p>
-                <div class="w-24 h-1 bg-brand-gold mx-auto mt-4 rounded-full"></div>
-            </div>
+    <!-- DISCORD -->
+    <section id="discord" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="relative bg-[url('./welcome.png')] bg-cover bg-center border border-brand-gold/40 rounded-3xl p-8 sm:p-14 overflow-hidden shadow-2xl">
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div class="text-center lg:text-left max-w-2xl">
+            <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider mb-4">JOIN THE <span class="text-brand-gold text-glow">COMMUNITY</span></h2>
+            <p class="text-gray-300 text-base sm:text-lg">Connect with fellow players, get the latest updates, and get support from our community.</p>
+          </div>
+          <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold uppercase px-8 py-5 rounded-2xl shadow-neon-gold">
+            <i class="fa-brands fa-discord text-2xl"></i> Join Discord
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto items-stretch">
-                <!-- Game Card 1: MIR4 LEGEND AEGIS -->
-                <div class="esports-card bg-brand-card rounded-2xl overflow-hidden group shadow-card-glow flex flex-col h-full">
-                    <div>
-                        <div class="game-art-wrap">
-                            <img src="logo.png" alt="LEGEND AEGIS" class="game-art game-logo-art">
-                            <span class="game-status bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold" data-i18n="status_coming_soon">
-                                COMING SOON
-                            </span>
-                        </div>
-                        <div class="px-8 pt-6 pb-2">
-                            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">MIR4 PRIVATE SERVER</p>
-                            <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">LEGEND AEGIS</h3>
-                        </div>
-                        <div class="p-8">
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed" data-i18n="card1_desc">
-                                Conquer the realm of NEW MIR4 WIZ GAMING through epic battles, fierce clan wars, and legendary sieges.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-8 mt-auto flex flex-col gap-3">
-                        <a href="https://discord.gg/g22pR3ttTN" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
-                            <i class="fa-brands fa-discord"></i>
-                            <span data-i18n="btn_discord">Discord</span>
-                        </a>
-                        <a href="https://www.legend-aegis.com" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
-                            <i class="fa-solid fa-globe"></i>
-                            <span data-i18n="btn_website">Website</span>
-                        </a>
-                        <button type="button" data-coming-soon="MIR4 AEGIS Download"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
-                            <i class="fa-solid fa-download"></i>
-                            <span data-i18n="btn_download">Download</span>
-                        </button>
-                    </div>
-                </div>
+  <!-- ASTRAL DOWNLOAD MODAL -->
+  <div id="astral-download-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4">
+    <div class="modal-backdrop absolute inset-0" data-close="astral"></div>
+    <div class="relative w-full max-w-lg bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold overflow-hidden">
+      <div class="px-6 py-5 border-b border-white/10 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-heading text-brand-gold uppercase tracking-widest mb-1">ASTRAL</p>
+          <h2 class="font-heading font-black text-xl sm:text-2xl uppercase">Choose Your Platform</h2>
+        </div>
+        <button type="button" data-close="astral" class="w-10 h-10 rounded-xl bg-white/5 text-gray-300" aria-label="Close"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+      <div class="p-6 space-y-3">
+        <a href="https://www.mediafire.com/file_premium/rgoqvbosdsq2neb/Play-Astral.rar/file" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 rounded-xl border border-gray-700 hover:border-brand-gold p-4">
+          <i class="fa-brands fa-windows text-3xl text-blue-300"></i>
+          <span class="flex-1"><strong class="block">Windows PC</strong><small class="text-gray-400">Download PC client (.RAR)</small></span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        <a href="https://www.mediafire.com/file_premium/gyxwkgtapbd70kt/Play-Astral.apk/file" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 rounded-xl border border-gray-700 hover:border-brand-gold p-4">
+          <i class="fa-brands fa-android text-3xl text-emerald-300"></i>
+          <span class="flex-1"><strong class="block">Android</strong><small class="text-gray-400">Download APK</small></span>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 
-                <!-- Game Card 2: ASTRAL -->
-                <div class="esports-card bg-brand-card rounded-2xl overflow-hidden group shadow-card-glow flex flex-col h-full">
-                    <div>
-                        <div class="game-art-wrap">
-                            <img src="ASTRAL.png" alt="ASTRAL" class="game-art game-logo-art">
-                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold" data-i18n="status_online">
-                                ONLINE
-                            </span>
-                        </div>
-                        <div class="px-8 pt-6 pb-2">
-                            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">PLAY-ASTRAL</p>
-                            <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">ASTRAL</h3>
-                        </div>
-                        <div class="p-8">
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed" data-i18n="card2_desc">
-                                Conquer the realm of ASTRAL through epic battles and fierce competition. Build powerful communities.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-8 mt-auto flex flex-col gap-3">
-                        <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
-                            <i class="fa-brands fa-discord"></i>
-                            <span data-i18n="btn_discord">Discord</span>
-                        </a>
-                        <a href="https://www.play-astral.com" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
-                            <i class="fa-solid fa-globe"></i>
-                            <span data-i18n="btn_website">Website</span>
-                        </a>
-                        <button type="button" id="astral-download-btn"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
-                            <i class="fa-solid fa-download"></i>
-                            <span data-i18n="btn_download">Download</span>
-                        </button>
-                    </div>
-                </div>
+  <!-- COMING SOON MODAL -->
+  <div id="coming-soon-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4">
+    <div class="modal-backdrop absolute inset-0" data-close="coming"></div>
+    <div class="relative w-full max-w-md bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold p-6 text-center">
+      <p class="text-xs font-heading text-brand-gold uppercase font-bold mb-2">MIR4 AEGIS</p>
+      <h2 class="font-heading font-black text-2xl">Coming Soon</h2>
+      <button type="button" data-close="coming" class="mt-6 w-full bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold uppercase px-6 py-3.5 rounded-xl">Got It</button>
+    </div>
+  </div>
 
-                <!-- Game Card 3: ROM REMEMBER OF MAJESTY -->
-                <div class="esports-card bg-brand-card rounded-2xl overflow-hidden group shadow-card-glow flex flex-col h-full">
-                    <div>
-                        <div class="game-art-wrap">
-                            <img src="ROM.png" alt="ROM: Remember of Majesty" class="game-art game-logo-art">
-                            <span class="game-status bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-heading px-3 py-1 rounded-full uppercase tracking-wider font-bold" data-i18n="status_online">
-                                ONLINE
-                            </span>
-                        </div>
-                        <div class="px-8 pt-6 pb-2">
-                            <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-2">ROM PRIVATE SERVER</p>
-                            <h3 class="font-heading font-black text-2xl sm:text-3xl text-white group-hover:text-brand-gold transition-colors leading-tight">ROM: REMEMBER OF MAJESTY</h3>
-                        </div>
-                        <div class="p-8">
-                            <p class="text-gray-400 text-sm mb-6 leading-relaxed" data-i18n="card3_desc">
-                                Forge your destiny in the world of Majesty. Battle alongside your guild and build your legacy.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-8 mt-auto flex flex-col gap-3">
-                        <a href="https://discord.gg/V87ZwmcxbM" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl transition-all duration-300">
-                            <i class="fa-brands fa-discord"></i>
-                            <span data-i18n="btn_discord">Discord</span>
-                        </a>
-                        <a href="https://rom.ym.games/en/" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all duration-300">
-                            <i class="fa-solid fa-globe"></i>
-                            <span data-i18n="btn_website">Website</span>
-                        </a>
-                        <a href="https://load.yoodream.com/game?ch=NTY3MmJyNDQyYnI" target="_blank" rel="noopener noreferrer"
-                           class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/5 hover:bg-brand-gold/10 text-white font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl border border-gray-700 hover:border-brand-gold transition-all duration-300">
-                            <i class="fa-solid fa-download"></i>
-                            <span data-i18n="btn_download">Download</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- GAME RECHARGE MODAL -->
+  <div id="game-recharge-modal" class="fixed inset-0 z-[130] hidden items-center justify-center p-3 sm:p-5" aria-hidden="true">
+    <div id="game-recharge-backdrop" class="modal-backdrop absolute inset-0"></div>
 
-        <!-- Astral Download Options Modal -->
-        <div id="astral-download-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4" aria-hidden="true">
-            <div id="astral-download-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-            <div id="astral-download-panel" class="relative w-full max-w-lg bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold overflow-hidden transform transition-all duration-300 scale-95 opacity-0">
-                <div class="relative px-6 py-5 border-b border-white/10 bg-gradient-to-r from-brand-card via-gray-900 to-brand-card">
-                    <div class="flex items-center justify-between gap-4">
-                        <div>
-                            <p class="text-xs font-heading text-brand-gold uppercase tracking-[0.25em] font-bold mb-1">ASTRAL</p>
-                            <h2 class="font-heading font-black text-2xl uppercase tracking-wider text-white">Choose Your Platform</h2>
-                        </div>
-                        <button type="button" id="astral-download-close" class="w-10 h-10 shrink-0 rounded-xl bg-white/5 hover:bg-brand-gold/20 text-gray-400 hover:text-white transition-colors">
-                            <i class="fa-solid fa-xmark text-xl"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6 grid grid-cols-1 gap-3">
-                    <a href="https://www.mediafire.com/file_premium/rgoqvbosdsq2neb/Play-Astral.rar/file" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 rounded-xl border border-gray-700 bg-black/20 hover:border-brand-gold hover:bg-brand-gold/10 p-4 transition-all">
-                        <span class="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-300 flex items-center justify-center text-2xl"><i class="fa-brands fa-windows"></i></span>
-                        <span class="flex-1"><span class="block font-heading font-bold uppercase text-white">Windows PC</span><span class="block text-sm text-gray-400 mt-1">Download PC client (.RAR)</span></span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-gray-500"></i>
-                    </a>
-                    <a href="https://www.mediafire.com/file_premium/gyxwkgtapbd70kt/Play-Astral.apk/file" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 rounded-xl border border-gray-700 bg-black/20 hover:border-brand-gold hover:bg-brand-gold/10 p-4 transition-all">
-                        <span class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-300 flex items-center justify-center text-2xl"><i class="fa-brands fa-android"></i></span>
-                        <span class="flex-1"><span class="block font-heading font-bold uppercase text-white">Android</span><span class="block text-sm text-gray-400 mt-1">Download APK</span></span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-gray-500"></i>
-                    </a>
-                </div>
-            </div>
+    <div class="relative w-full max-w-2xl max-h-[94vh] overflow-y-auto bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold">
+      <div class="sticky top-0 z-10 px-5 sm:px-6 py-5 border-b border-white/10 bg-brand-card flex items-center justify-between gap-4">
+        <div>
+          <p class="text-xs font-heading text-brand-gold uppercase tracking-widest font-bold mb-1">WIZ GAMING</p>
+          <h2 class="font-heading font-black text-xl sm:text-2xl uppercase">Game Recharge</h2>
+          <p class="text-sm text-gray-400 mt-1">Fill in your details to continue to checkout.</p>
+        </div>
+        <button type="button" id="game-recharge-close" aria-label="Close Game Recharge" class="w-10 h-10 shrink-0 rounded-xl bg-white/5 text-gray-300 hover:text-white">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <form id="game-recharge-form" class="p-5 sm:p-6 space-y-5">
+        <div>
+          <label for="recharge-game" class="block text-sm font-semibold text-gray-200 mb-2">Choose Game</label>
+          <select id="recharge-game" name="game" required class="form-control">
+            <option value="" disabled selected>Select a game</option>
+            <option value="LEGEND AEGIS">MIR4 — LEGEND AEGIS</option>
+            <option value="ASTRAL">ASTRAL</option>
+            <option value="ROM">ROM: REMEMBER OF MAJESTY</option>
+          </select>
         </div>
 
-        <!-- Coming Soon Modal -->
-        <div id="coming-soon-modal" class="fixed inset-0 z-[120] hidden items-center justify-center p-4" aria-hidden="true">
-            <div id="coming-soon-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-            <div id="coming-soon-panel" class="relative w-full max-w-md bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold overflow-hidden p-6 text-center">
-                <p class="text-xs font-heading text-brand-gold uppercase font-bold mb-2">MIR4 AEGIS</p>
-                <h2 id="coming-soon-title" class="font-heading font-black text-2xl text-white">Coming Soon</h2>
-                <button type="button" id="coming-soon-close" class="mt-6 w-full bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-3.5 rounded-xl">Got It</button>
-            </div>
+        <div>
+          <label for="recharge-amount" class="block text-sm font-semibold text-gray-200 mb-2">Recharge Amount</label>
+          <select id="recharge-amount" name="amount" required class="form-control">
+            <option value="" disabled selected>Choose Game Cash</option>
+          </select>
+          <p class="text-xs text-gray-500 mt-2">Price calculation: US$0.15 per Game Cash × fixed rate ₱64/USD.</p>
         </div>
 
-
-        <!-- Game Recharge Modal: front-end preview only; payment processing is not connected yet. -->
-        <div id="game-recharge-modal" class="fixed inset-0 z-[130] hidden items-center justify-center p-4" aria-hidden="true">
-            <div id="game-recharge-backdrop" class="absolute inset-0 bg-black/85 backdrop-blur-sm"></div>
-            <div class="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold">
-                <div class="sticky top-0 z-10 px-6 py-5 border-b border-white/10 bg-brand-card flex items-center justify-between gap-4">
-                    <div>
-                        <p class="text-xs font-heading text-brand-gold uppercase tracking-[0.25em] font-bold mb-1">WIZ GAMING</p>
-                        <h2 class="font-heading font-black text-2xl uppercase tracking-wider text-white">Game Recharge</h2>
-                        <p class="text-sm text-gray-400 mt-1">Choose your game, amount, and payment method.</p>
-                    </div>
-                    <button type="button" id="game-recharge-close" aria-label="Close Game Recharge" class="w-10 h-10 shrink-0 rounded-xl bg-white/5 hover:bg-brand-gold/20 text-gray-400 hover:text-white transition-colors">
-                        <i class="fa-solid fa-xmark text-xl"></i>
-                    </button>
-                </div>
-
-                <form id="game-recharge-form" class="p-6 space-y-5">
-                    <div>
-                        <label for="recharge-game" class="block text-sm font-semibold text-gray-200 mb-2">Choose Game</label>
-                        <select id="recharge-game" name="game" required class="w-full rounded-xl bg-black/40 border border-gray-700 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold text-white px-4 py-3">
-                            <option value="" disabled selected>Select a game</option>
-                            <option value="LEGEND AEGIS">MIR4 — LEGEND AEGIS</option>
-                            <option value="ASTRAL">ASTRAL</option>
-                            <option value="ROM: REMEMBER OF MAJESTY">ROM: REMEMBER OF MAJESTY</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="recharge-amount" class="block text-sm font-semibold text-gray-200 mb-2">Recharge Amount</label>
-                        <select id="recharge-amount" name="amount" required class="w-full rounded-xl bg-black/40 border border-gray-700 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold text-white px-4 py-3">
-                            <option value="" disabled selected>Choose Game Cash</option>
-                        </select>
-                        <p class="text-xs text-gray-500 mt-2">Displayed USD prices use the sample rate of 50 Game Cash = $7.50. Confirm your actual price list before accepting payments.</p>
-                    </div>
-
-                    <div class="rounded-xl border border-brand-gold/30 bg-brand-gold/5 p-4 flex items-center justify-between gap-4">
-                        <span class="text-sm text-gray-300">Order total</span>
-                        <strong id="recharge-total" class="font-heading text-2xl text-brand-gold">$0.00 USD</strong>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-200 mb-2">Payment Method</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <label class="cursor-pointer">
-                                <input class="peer sr-only" type="radio" name="payment_method" value="GCASH" required>
-                                <span class="flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-700 bg-black/20 p-4 text-gray-300 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold">
-                                    <i class="fa-solid fa-mobile-screen-button text-xl"></i><span class="text-xs font-bold">GCASH</span>
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input class="peer sr-only" type="radio" name="payment_method" value="MAYA">
-                                <span class="flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-700 bg-black/20 p-4 text-gray-300 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold">
-                                    <i class="fa-solid fa-wallet text-xl"></i><span class="text-xs font-bold">MAYA</span>
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input class="peer sr-only" type="radio" name="payment_method" value="BANK TRANSFER">
-                                <span class="flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-700 bg-black/20 p-4 text-gray-300 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold">
-                                    <i class="fa-solid fa-building-columns text-xl"></i><span class="text-xs font-bold">BANK</span>
-                                </span>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input class="peer sr-only" type="radio" name="payment_method" value="QR PH">
-                                <span class="flex flex-col items-center justify-center gap-2 rounded-xl border border-gray-700 bg-black/20 p-4 text-gray-300 peer-checked:border-brand-gold peer-checked:bg-brand-gold/10 peer-checked:text-brand-gold">
-                                    <i class="fa-solid fa-qrcode text-xl"></i><span class="text-xs font-bold">QR PH</span>
-                                </span>
-                            </label>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2">HitPay / QR Ph checkout is not connected yet. This form will not collect payment.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="recharge-username" class="block text-sm font-semibold text-gray-200 mb-2">In-game Username</label>
-                            <input id="recharge-username" name="username" type="text" maxlength="80" autocomplete="username" required placeholder="Enter your game username" class="w-full rounded-xl bg-black/40 border border-gray-700 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold text-white placeholder-gray-600 px-4 py-3">
-                        </div>
-                        <div>
-                            <label for="recharge-email" class="block text-sm font-semibold text-gray-200 mb-2">Email for Receipt</label>
-                            <input id="recharge-email" name="email" type="email" maxlength="254" autocomplete="email" required placeholder="you@example.com" class="w-full rounded-xl bg-black/40 border border-gray-700 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold text-white placeholder-gray-600 px-4 py-3">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all">
-                        <i class="fa-solid fa-lock"></i> Continue to Payment (Preview)
-                    </button>
-                    <p id="recharge-preview-message" class="hidden text-sm text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-xl p-3" role="status"></p>
-                </form>
-            </div>
+        <div class="rounded-xl border border-brand-gold/30 bg-brand-gold/5 p-4 flex items-center justify-between gap-4">
+          <div>
+            <span class="block text-sm text-gray-300">Order total</span>
+            <span id="recharge-usd" class="block text-xs text-gray-500 mt-1">$0.00 USD</span>
+          </div>
+          <strong id="recharge-total" class="font-heading text-xl sm:text-2xl text-brand-gold">₱0.00</strong>
         </div>
 
-        <!-- Discord Community Banner -->
-        <section id="discord" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div class="relative bg-[url('./welcome.png')] bg-cover bg-center bg-no-repeat border border-brand-gold/40 rounded-3xl p-8 sm:p-14 overflow-hidden shadow-2xl">
-                <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-                    <div class="text-center lg:text-left max-w-2xl">
-                        <h2 class="font-heading font-black text-3xl sm:text-5xl uppercase tracking-wider text-white mb-4">
-                            <span data-i18n="join_the">JOIN THE</span> <span class="text-brand-gold text-glow" data-i18n="community">COMMUNITY</span>
-                        </h2>
-                        <p class="text-gray-300 text-base sm:text-lg leading-relaxed" data-i18n="discord_desc">
-                            Connect with fellow players, get the latest updates, and get support from our community.
-                        </p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto shrink-0">
-                        <a href="https://discord.gg/2dU4T2RWXQ" target="_blank" rel="noopener noreferrer" 
-                           class="inline-flex items-center justify-center gap-3 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-base uppercase px-8 py-5 rounded-2xl shadow-neon-gold transition-all">
-                            <i class="fa-brands fa-discord text-2xl"></i>
-                            <span data-i18n="btn_join_discord">Join Discord</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-brand-dark/90 border-t border-gray-800/80 py-10 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-            <div class="flex items-center gap-3">
-                <img src="WizWeb.png" alt="AEGIS Logo Small" class="h-10 w-auto rounded logo-glow">
-                <div>
-                    <span class="font-heading font-bold text-lg text-white tracking-wider block">WIZ GAMING</span>
-                </div>
-            </div>
-            <p class="text-xs text-gray-500">&copy; 2026 WIZ GAMING. All rights reserved.</p>
+        <div>
+          <label class="block text-sm font-semibold text-gray-200 mb-2">Preferred Payment Method</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <label class="payment-choice cursor-pointer">
+              <input class="sr-only" type="radio" name="payment_method" value="ewallet" required>
+              <span><i class="fa-solid fa-mobile-screen-button text-xl"></i><b class="text-xs">GCASH / MAYA</b></span>
+            </label>
+            <label class="payment-choice cursor-pointer">
+              <input class="sr-only" type="radio" name="payment_method" value="qr_ph">
+              <span><i class="fa-solid fa-qrcode text-xl"></i><b class="text-xs">QR PH</b></span>
+            </label>
+            <label class="payment-choice cursor-pointer">
+              <input class="sr-only" type="radio" name="payment_method" value="bank_transfer">
+              <span><i class="fa-solid fa-building-columns text-xl"></i><b class="text-xs">BANK</b></span>
+            </label>
+            <label class="payment-choice cursor-pointer">
+              <input class="sr-only" type="radio" name="payment_method" value="binance_usdt">
+              <span><i class="fa-brands fa-bitcoin text-xl"></i><b class="text-xs">USDT</b></span>
+            </label>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Available payment options at checkout depend on the payment methods enabled in your HitPay account. The selected preference is saved with your order.</p>
         </div>
-    </footer>
 
-    <!-- Scripts -->
-    <script>
-        // Dictionary para sa multi-language translation
-        const translations = {
-            en: {
-                nav_home: "Home",
-                nav_games: "Games",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "YOUR TRUSTED GAMING AGENT & MIDDLEMAN",
-                hero_desc: "Discover top private server games, fast and secure game recharges, and safe middleman services for all players.",
-                btn_join_discord_comm: "Join Discord Community",
-                btn_view_games: "View Active Games",
-                featured_text: "FEATURED",
-                games_text: "GAMES",
-                games_subtitle: "Explore the best MMORPG private servers available under WIZ GAMING.",
-                status_coming_soon: "COMING SOON",
-                status_online: "ONLINE",
-                card1_desc: "Conquer the realm of NEW MIR4 WIZ GAMING through epic battles, fierce clan wars, and legendary sieges.",
-                card2_desc: "Conquer the realm of ASTRAL through epic battles and fierce competition. Build powerful communities.",
-                card3_desc: "Forge your destiny in the world of Majesty. Battle alongside your guild and build your legacy.",
-                btn_website: "Website",
-                btn_download: "Download",
-                join_the: "JOIN THE",
-                community: "COMMUNITY",
-                discord_desc: "Connect with fellow players, get the latest updates, and get support from our community.",
-                btn_join_discord: "Join Discord"
-            },
-            pt: {
-                nav_home: "Início",
-                nav_games: "Jogos",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "SEU AGENTE DE JOGOS E INTERMEDIÁRIO CONFIÁVEL",
-                hero_desc: "Descubra os melhores servidores privados, recargas de jogos rápidas e seguras, e serviços seguros de middleman para todos os jogadores.",
-                btn_join_discord_comm: "Entrar na Comunidade do Discord",
-                btn_view_games: "Ver Jogos Ativos",
-                featured_text: "DESTAQUE",
-                games_text: "JOGOS",
-                games_subtitle: "Explore os melhores servidores privados de MMORPG disponíveis sob WIZ GAMING.",
-                status_coming_soon: "EM BREVE",
-                status_online: "ONLINE",
-                card1_desc: "Conquiste o reino do NOVO MIR4 WIZ GAMING através de batalhas épicas, guerras de clãs ferozes e cercos lendários.",
-                card2_desc: "Conquiste o reino de ASTRAL através de batalhas épicas e competição acirrada. Construa comunidades poderosas.",
-                card3_desc: "Forje seu destino no mundo de Majesty. Batalhe ao lado de sua guilda e construa seu legado.",
-                btn_website: "Site",
-                btn_download: "Baixar",
-                join_the: "JUNTE-SE À",
-                community: "COMUNIDADE",
-                discord_desc: "Conecte-se com outros jogadores, obtenha as últimas atualizações e suporte da nossa comunidade.",
-                btn_join_discord: "Entrar no Discord"
-            },
-            zh: {
-                nav_home: "首页",
-                nav_games: "游戏",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "您值得信赖的游戏代理与中介",
-                hero_desc: "发现顶级私服游戏，享受快速安全的充值服务，以及为所有玩家提供的安全中介服务。",
-                btn_join_discord_comm: "加入Discord社区",
-                btn_view_games: "查看运行中的游戏",
-                featured_text: "精选",
-                games_text: "游戏",
-                games_subtitle: "探索WIZ GAMING旗下的最佳MMORPG私服。",
-                status_coming_soon: "敬请期待",
-                status_online: "在线",
-                card1_desc: "通过史诗般的战斗、激烈的行会战和传奇围攻，征服全新MIR4 WIZ GAMING的领域。",
-                card2_desc: "通过史诗般的战斗和激烈的竞争征服ASTRAL领域。建立强大的社区。",
-                card3_desc: "在Majesty的世界中铸造你的命运。与你的公会并肩作战，建立你的传奇。",
-                btn_website: "网站",
-                btn_download: "下载",
-                join_the: "加入",
-                community: "社区",
-                discord_desc: "与其他玩家交流，获取最新动态并获得社区支持。",
-                btn_join_discord: "加入Discord"
-            },
-            ph: {
-                nav_home: "Tahanan",
-                nav_games: "Mga Laro",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "ANG IYONG PINAGKAKATIWALAANG GAMING AGENT & MIDDLEMAN",
-                hero_desc: "Tumuklas ng mga nangungunang private server games, mabilis at ligtas na game recharges, at trusted middleman services para sa mga players.",
-                btn_join_discord_comm: "Sumali sa Discord Community",
-                btn_view_games: "Tingnan ang mga Laro",
-                featured_text: "ITINATAMPOK NA",
-                games_text: "MGA LARO",
-                games_subtitle: "Tuklasin ang pinakamahusay na MMORPG private servers sa ilalim ng WIZ GAMING.",
-                status_coming_soon: "ABANGAN",
-                status_online: "ONLINE",
-                card1_desc: "Lupigin ang kaharian ng BAGONG MIR4 WIZ GAMING sa pamamagitan ng mga epikong labanan at digmaan ng mga lipi.",
-                card2_desc: "Lupigin ang kaharian ng ASTRAL sa pamamagitan ng mga epikong labanan at kumpetisyon. Bumuo ng malakas na komunidad.",
-                card3_desc: "Hubugin ang iyong tadhana sa mundo ng Majesty. Makipaglaban kasama ang iyong guild at buuin ang iyong legacy.",
-                btn_website: "Website",
-                btn_download: "I-download",
-                join_the: "SUMALI SA",
-                community: "KOMUNIDAD",
-                discord_desc: "Makipag-ugnayan sa kapwa manlalaro, alamin ang mga huling update, at humingi ng tulong sa komunidad.",
-                btn_join_discord: "Sumali sa Discord"
-            },
-            id: {
-                nav_home: "Beranda",
-                nav_games: "Game",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "AGEN GAME & MIDDLEMAN TERPERCAYA ANDA",
-                hero_desc: "Temukan game server pribadi teratas, isi ulang game yang cepat dan aman, serta layanan middleman yang aman untuk semua pemain.",
-                btn_join_discord_comm: "Gabung Komunitas Discord",
-                btn_view_games: "Lihat Game Aktif",
-                featured_text: "UNGGULAN",
-                games_text: "GAME",
-                games_subtitle: "Jelajahi server pribadi MMORPG terbaik yang tersedia di bawah WIZ GAMING.",
-                status_coming_soon: "SEGERA",
-                status_online: "ONLINE",
-                card1_desc: "Taklukkan dunia MIR4 WIZ GAMING BARU melalui pertempuran epik, perang klan sengit, dan pengepungan legendaris.",
-                card2_desc: "Taklukkan dunia ASTRAL melalui pertempuran epik dan persaingan ketat. Bangun komunitas yang kuat.",
-                card3_desc: "Tempa takdirmu di dunia Majesty. Berjuanglah bersama guildmu dan bangun warisanmu.",
-                btn_website: "Situs Web",
-                btn_download: "Unduh",
-                join_the: "GABUNG KE",
-                community: "KOMUNITAS",
-                discord_desc: "Terhubung dengan pemain lain, dapatkan pembaruan terkini, dan dapatkan dukungan dari komunitas kami.",
-                btn_join_discord: "Gabung Discord"
-            },
-            th: {
-                nav_home: "หน้าแรก",
-                nav_games: "เกม",
-                nav_discord: "ดิสคอร์ด",
-                btn_discord: "Discord",
-                hero_subtitle: "ตัวแทนเกมและคนกลางที่คุณไว้วางใจ",
-                hero_desc: "ค้นหาเกมเซิร์ฟเวอร์ส่วนตัวชั้นนำ การเติมเงินเกมที่รวดเร็วและปลอดภัย และบริการคนกลางที่ปลอดภัยสำหรับผู้เล่นทุกคน",
-                btn_join_discord_comm: "เข้าร่วมชุมชน Discord",
-                btn_view_games: "ดูเกมที่เปิดให้บริการ",
-                featured_text: "แนะนำ",
-                games_text: "เกม",
-                games_subtitle: "สำรวจเซิร์ฟเวอร์ส่วนตัว MMORPG ที่ดีที่สุดภายใต้ WIZ GAMING",
-                status_coming_soon: "เร็วๆ นี้",
-                status_online: "ออนไลน์",
-                card1_desc: "พิชิตอาณาจักร NEW MIR4 WIZ GAMING ผ่านการต่อสู้สุดอลังการ สงครามแคลน และการปิดล้อมระดับตำนาน",
-                card2_desc: "พิชิตอาณาจักร ASTRAL ผ่านการต่อสู้ที่ดุเดือด สร้างคอมมูนิตี้ที่แข็งแกร่ง",
-                card3_desc: "สร้างชะตากรรมของคุณในโลกแห่ง Majesty ต่อสู้เคียงข้างกิลด์ของคุณและสร้างตำนาน",
-                btn_website: "เว็บไซต์",
-                btn_download: "ดาวน์โหลด",
-                join_the: "เข้าร่วม",
-                community: "ชุมชน",
-                discord_desc: "เชื่อมต่อกับผู้เล่นคนอื่นๆ รับข้อมูลอัปเดตล่าสุด และรับการสนับสนุนจากชุมชนของเรา",
-                btn_join_discord: "เข้าร่วม Discord"
-            },
-            vi: {
-                nav_home: "Trang chủ",
-                nav_games: "Trò chơi",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "ĐẠI LÝ TRÒ CHƠI & TRUNG GIAN ĐÁNG TIN CẬY CỦA BẠN",
-                hero_desc: "Khám phá các trò chơi máy chủ riêng hàng đầu, nạp game nhanh chóng, an toàn và dịch vụ trung gian uy tín cho mọi game thủ.",
-                btn_join_discord_comm: "Tham gia cộng đồng Discord",
-                btn_view_games: "Xem trò chơi đang hoạt động",
-                featured_text: "NỔI BẬT",
-                games_text: "TRÒ CHƠI",
-                games_subtitle: "Khám phá các máy chủ riêng MMORPG tốt nhất có sẵn dưới WIZ GAMING.",
-                status_coming_soon: "SẮP RA MẮT",
-                status_online: "TRỰC TUYẾN",
-                card1_desc: "Chinh phục vương quốc MIR4 WIZ GAMING MỚI thông qua các trận chiến hoành tráng, chiến tranh bang hội khốc liệt và các cuộc bao vây huyền thoại.",
-                card2_desc: "Chinh phục vương quốc ASTRAL thông qua các trận chiến hoành tráng và sự cạnh tranh khốc liệt. Xây dựng cộng đồng mạnh mẽ.",
-                card3_desc: "Tạo nên vận mệnh của bạn trong thế giới Majesty. Chiến đấu bên cạnh bang hội của bạn và xây dựng di sản của bạn.",
-                btn_website: "Trang web",
-                btn_download: "Tải về",
-                join_the: "THAM GIA",
-                community: "CỘNG ĐỒNG",
-                discord_desc: "Kết nối với những người chơi khác, nhận thông tin cập nhật mới nhất và nhận hỗ trợ từ cộng đồng của chúng tôi.",
-                btn_join_discord: "Tham gia Discord"
-            },
-            ru: {
-                nav_home: "Главная",
-                nav_games: "Игры",
-                nav_discord: "Discord",
-                btn_discord: "Discord",
-                hero_subtitle: "ВАШ НАДЕЖНЫЙ ИГРОВОЙ АГЕНТ И ГАРАНТ",
-                hero_desc: "Откройте для себя лучшие приватные серверы, быстрое и безопасное пополнение счетов и надежные услуги гаранта для всех игроков.",
-                btn_join_discord_comm: "Присоединиться к сообществу Discord",
-                btn_view_games: "Посмотреть игры",
-                featured_text: "ИЗБРАННЫЕ",
-                games_text: "ИГРЫ",
-                games_subtitle: "Изучите лучшие приватные серверы MMORPG под управлением WIZ GAMING.",
-                status_coming_soon: "СКОРО",
-                status_online: "В СЕТИ",
-                card1_desc: "Покорите мир НОВОГО MIR4 WIZ GAMING в эпических битвах, ожесточенных клановых войнах и легендарных осадах.",
-                card2_desc: "Покорите мир ASTRAL в эпических битвах и ожесточенной конкуренции. Создайте мощные сообщества.",
-                card3_desc: "Сформируйте свою судьбу в мире Majesty. Сражайтесь бок о бок со своей гильдией и создайте свое наследие.",
-                btn_website: "Веб-сайт",
-                btn_download: "Скачать",
-                join_the: "ПРИСОЕДИНЯЙТЕСЬ К",
-                community: "СООБЩЕСТВУ",
-                discord_desc: "Общайтесь с другими игроками, получайте последние обновления и поддержку от нашего сообщества.",
-                btn_join_discord: "Присоединиться к Discord"
-            },
-            ko: {
-                nav_home: "홈",
-                nav_games: "게임",
-                nav_discord: "디스코드",
-                btn_discord: "Discord",
-                hero_subtitle: "신뢰할 수 있는 게임 에이전트 & 중개인",
-                hero_desc: "최고의 프라이빗 서버 게임을 발견하고, 빠르고 안전한 게임 충전 및 안전한 중개 서비스를 경험하세요.",
-                btn_join_discord_comm: "디스코드 커뮤니티 가입하기",
-                btn_view_games: "활성 게임 보기",
-                featured_text: "추천",
-                games_text: "게임",
-                games_subtitle: "WIZ GAMING에서 제공하는 최고의 MMORPG 프라이빗 서버를 살펴보세요.",
-                status_coming_soon: "출시 예정",
-                status_online: "온라인",
-                card1_desc: "서사적인 전투, 치열한 클랜전, 전설적인 공성전을 통해 신규 MIR4 WIZ GAMING의 영토를 정복하세요.",
-                card2_desc: "서사적인 전투와 치열한 경쟁을 통해 ASTRAL의 영토를 정복하고 강력한 커뮤니티를 구축하세요.",
-                card3_desc: "Majesty의 세계에서 당신의 운명을 개척하세요. 길드와 함께 싸우고 전설을 만드세요.",
-                btn_website: "웹사이트",
-                btn_download: "다운로드",
-                join_the: "함께해요",
-                community: "커뮤니티",
-                discord_desc: "다른 플레이어들과 소통하고, 최신 업데이트를 확인하며, 커뮤니티의 지원을 받으세요.",
-                btn_join_discord: "디스코드 참여하기"
-            }
-        };
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="recharge-username" class="block text-sm font-semibold text-gray-200 mb-2">In-game Username</label>
+            <input id="recharge-username" name="username" type="text" maxlength="80" required autocomplete="username" placeholder="Enter your game username" class="form-control">
+          </div>
+          <div>
+            <label for="recharge-email" class="block text-sm font-semibold text-gray-200 mb-2">Email for Receipt</label>
+            <input id="recharge-email" name="email" type="email" maxlength="254" required autocomplete="email" placeholder="you@example.com" class="form-control">
+          </div>
+        </div>
 
-        // Mobile Navigation Menu Toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-        }
+        <div id="recharge-message" class="hidden text-sm rounded-xl p-3" role="status" aria-live="polite"></div>
 
-        // Language Dropdown Toggle and Selection
-        const langBtn = document.getElementById('lang-menu-btn');
-        const langDropdown = document.getElementById('lang-dropdown');
-        const currentLangSpan = document.getElementById('current-lang');
+        <button id="recharge-submit" type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all">
+          <i class="fa-solid fa-lock"></i><span id="recharge-submit-text">Continue to Secure Checkout</span>
+        </button>
+        <p class="text-xs text-center text-gray-500">Your order will be created by our server. Payment is only confirmed after server-side verification.</p>
+      </form>
+    </div>
+  </div>
 
-        if (langBtn && langDropdown) {
-            langBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                langDropdown.classList.toggle('hidden');
-            });
+  <!-- FOOTER -->
+  <footer class="bg-brand-dark/90 border-t border-gray-800/80 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+      <div class="flex items-center gap-3">
+        <img src="WizWeb.png" alt="WIZ GAMING" class="h-10 w-auto logo-glow">
+        <span class="font-heading font-bold text-lg tracking-wider">WIZ GAMING</span>
+      </div>
+      <p class="text-xs text-gray-500">&copy; 2026 WIZ GAMING. All rights reserved.</p>
+    </div>
+  </footer>
 
-            window.addEventListener('click', () => {
-                if (!langDropdown.classList.contains('hidden')) {
-                    langDropdown.classList.add('hidden');
-                }
-            });
-        }
+  <script>
+    // Mobile menu
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-        function setLanguage(lang) {
-            const langCodes = {
-                en: 'EN',
-                pt: 'PT',
-                zh: 'ZH',
-                ph: 'PH',
-                id: 'ID',
-                th: 'TH',
-                vi: 'VN',
-                ru: 'RU',
-                ko: 'KO'
-            };
+    mobileMenuBtn?.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
 
-            if (currentLangSpan) {
-                currentLangSpan.innerText = langCodes[lang] || 'EN';
-            }
+    mobileMenu?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
 
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    el.innerText = translations[lang][key];
-                }
-            });
+    // Language menu (basic language selector UI)
+    const langMenuBtn = document.getElementById('lang-menu-btn');
+    const langDropdown = document.getElementById('lang-dropdown');
 
-            if (langDropdown) {
-                langDropdown.classList.add('hidden');
-            }
-        }
+    langMenuBtn?.addEventListener('click', event => {
+      event.stopPropagation();
+      langDropdown.classList.toggle('hidden');
+    });
 
-        // Astral Download Options Modal
-        const astralDownloadModal = document.getElementById('astral-download-modal');
-        const astralDownloadPanel = document.getElementById('astral-download-panel');
-        const astralDownloadBtn = document.getElementById('astral-download-btn');
-        const astralDownloadClose = document.getElementById('astral-download-close');
-        const astralDownloadBackdrop = document.getElementById('astral-download-backdrop');
+    document.addEventListener('click', event => {
+      if (!langDropdown?.contains(event.target) && !langMenuBtn?.contains(event.target)) {
+        langDropdown?.classList.add('hidden');
+      }
+    });
 
-        function openDownloadModal() {
-            astralDownloadModal.classList.remove('hidden');
-            astralDownloadModal.classList.add('flex');
-            setTimeout(() => {
-                astralDownloadPanel.classList.remove('scale-95', 'opacity-0');
-                astralDownloadPanel.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
+    document.querySelectorAll('.lang-option').forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById('current-lang').textContent = button.dataset.lang.toUpperCase();
+        langDropdown.classList.add('hidden');
+      });
+    });
 
-        function closeDownloadModal() {
-            astralDownloadPanel.classList.remove('scale-100', 'opacity-100');
-            astralDownloadPanel.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                astralDownloadModal.classList.remove('flex');
-                astralDownloadModal.classList.add('hidden');
-            }, 250);
-        }
+    // Modal helpers
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.classList.add('overflow-hidden');
+    }
 
-        if (astralDownloadBtn) astralDownloadBtn.addEventListener('click', openDownloadModal);
-        if (astralDownloadClose) astralDownloadClose.addEventListener('click', closeDownloadModal);
-        if (astralDownloadBackdrop) astralDownloadBackdrop.addEventListener('click', closeDownloadModal);
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.classList.remove('overflow-hidden');
+    }
 
+    document.getElementById('astral-download-btn')?.addEventListener('click', () => openModal('astral-download-modal'));
 
-        // Game Recharge modal and sample pricing. Payment + Discord notification are not connected yet.
-        const gameRechargeModal = document.getElementById('game-recharge-modal');
-        const gameRechargeClose = document.getElementById('game-recharge-close');
-        const gameRechargeBackdrop = document.getElementById('game-recharge-backdrop');
-        const gameRechargeForm = document.getElementById('game-recharge-form');
-        const rechargeAmountSelect = document.getElementById('recharge-amount');
-        const rechargeTotal = document.getElementById('recharge-total');
-        const rechargePreviewMessage = document.getElementById('recharge-preview-message');
+    document.querySelectorAll('[data-close="astral"]').forEach(el => {
+      el.addEventListener('click', () => closeModal('astral-download-modal'));
+    });
 
-        // Assumption for this preview: 50 Game Cash = US$7.50, scaling linearly.
-        for (let cash = 50; cash <= 5000; cash += 50) {
-            const price = cash * 0.15;
-            const option = document.createElement('option');
-            option.value = String(cash);
-            option.textContent = `${cash.toLocaleString()} Game Cash ($${price.toFixed(2)} USD)`;
-            option.dataset.price = price.toFixed(2);
-            rechargeAmountSelect.appendChild(option);
-        }
+    document.querySelectorAll('[data-coming-soon]').forEach(button => {
+      button.addEventListener('click', () => openModal('coming-soon-modal'));
+    });
 
-        rechargeAmountSelect.addEventListener('change', () => {
-            const selected = rechargeAmountSelect.options[rechargeAmountSelect.selectedIndex];
-            const price = selected && selected.dataset.price ? Number(selected.dataset.price) : 0;
-            rechargeTotal.textContent = `$${price.toFixed(2)} USD`;
-            rechargePreviewMessage.classList.add('hidden');
+    document.querySelectorAll('[data-close="coming"]').forEach(el => {
+      el.addEventListener('click', () => closeModal('coming-soon-modal'));
+    });
+
+    // Game recharge modal
+    const rechargeModal = document.getElementById('game-recharge-modal');
+    const rechargeForm = document.getElementById('game-recharge-form');
+    const rechargeAmount = document.getElementById('recharge-amount');
+    const rechargeTotal = document.getElementById('recharge-total');
+    const rechargeUSD = document.getElementById('recharge-usd');
+    const rechargeMessage = document.getElementById('recharge-message');
+    const rechargeSubmit = document.getElementById('recharge-submit');
+    const rechargeSubmitText = document.getElementById('recharge-submit-text');
+
+    const USD_PER_GAME_CASH = 0.15;
+    const PHP_PER_USD = 64;
+
+    function formatPHP(value) {
+      return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    }
+
+    function getPrice(cash) {
+      const usd = Number((cash * USD_PER_GAME_CASH).toFixed(2));
+      const php = Number((usd * PHP_PER_USD).toFixed(2));
+      return { usd, php };
+    }
+
+    for (let cash = 50; cash <= 5000; cash += 50) {
+      const price = getPrice(cash);
+      const option = document.createElement('option');
+      option.value = String(cash);
+      option.textContent = `${cash.toLocaleString()} Game Cash — ${formatPHP(price.php)}`;
+      option.dataset.usd = price.usd.toFixed(2);
+      option.dataset.php = price.php.toFixed(2);
+      rechargeAmount.appendChild(option);
+    }
+
+    function updatePrice() {
+      const selected = rechargeAmount.options[rechargeAmount.selectedIndex];
+      if (!selected || !selected.dataset.php) {
+        rechargeTotal.textContent = formatPHP(0);
+        rechargeUSD.textContent = '$0.00 USD';
+        return;
+      }
+      rechargeTotal.textContent = formatPHP(Number(selected.dataset.php));
+      rechargeUSD.textContent = `$${Number(selected.dataset.usd).toFixed(2)} USD`;
+      hideMessage();
+    }
+
+    rechargeAmount.addEventListener('change', updatePrice);
+
+    function showMessage(message, type = 'error') {
+      rechargeMessage.textContent = message;
+      rechargeMessage.classList.remove('hidden', 'text-red-300', 'bg-red-500/10', 'border-red-500/30', 'text-emerald-300', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-amber-300', 'bg-amber-500/10', 'border-amber-500/30');
+      if (type === 'success') {
+        rechargeMessage.classList.add('text-emerald-300', 'bg-emerald-500/10', 'border', 'border-emerald-500/30');
+      } else if (type === 'warning') {
+        rechargeMessage.classList.add('text-amber-300', 'bg-amber-500/10', 'border', 'border-amber-500/30');
+      } else {
+        rechargeMessage.classList.add('text-red-300', 'bg-red-500/10', 'border', 'border-red-500/30');
+      }
+    }
+
+    function hideMessage() {
+      rechargeMessage.classList.add('hidden');
+      rechargeMessage.textContent = '';
+    }
+
+    function openRecharge() {
+      openModal('game-recharge-modal');
+      rechargeModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeRecharge() {
+      closeModal('game-recharge-modal');
+      rechargeModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.querySelectorAll('.open-recharge').forEach(button => {
+      button.addEventListener('click', () => {
+        mobileMenu?.classList.add('hidden');
+        openRecharge();
+      });
+    });
+
+    document.getElementById('game-recharge-close')?.addEventListener('click', closeRecharge);
+    document.getElementById('game-recharge-backdrop')?.addEventListener('click', closeRecharge);
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closeRecharge();
+        closeModal('astral-download-modal');
+        closeModal('coming-soon-modal');
+      }
+    });
+
+    // Create order on the server and redirect to HitPay.
+    // Never put Supabase or HitPay secret keys in this HTML.
+    rechargeForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      hideMessage();
+
+      const game = document.getElementById('recharge-game').value;
+      const cash = Number(rechargeAmount.value);
+      const username = document.getElementById('recharge-username').value.trim();
+      const email = document.getElementById('recharge-email').value.trim();
+      const paymentMethod = rechargeForm.querySelector('input[name="payment_method"]:checked')?.value;
+
+      if (!game || !cash || !username || !email || !paymentMethod) {
+        showMessage('Please complete all required fields.');
+        return;
+      }
+
+      if (cash < 50 || cash > 5000 || cash % 50 !== 0) {
+        showMessage('Please select a valid Game Cash amount.');
+        return;
+      }
+
+      rechargeSubmit.disabled = true;
+      rechargeSubmitText.textContent = 'Creating your order...';
+
+      try {
+        const response = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            game_name: game,
+            game_username: username,
+            customer_email: email,
+            game_cash: cash,
+            payment_method: paymentMethod
+          })
         });
 
-        function openGameRecharge() {
-            gameRechargeModal.classList.remove('hidden');
-            gameRechargeModal.classList.add('flex');
-            gameRechargeModal.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('overflow-hidden');
+        const rawText = await response.text();
+        let result;
+
+        try {
+          result = rawText ? JSON.parse(rawText) : {};
+        } catch {
+          throw new Error(
+            response.status >= 500
+              ? 'The payment server is temporarily unavailable. Please try again later.'
+              : 'The server returned an unexpected response. Please contact support.'
+          );
         }
 
-        function closeGameRecharge() {
-            gameRechargeModal.classList.add('hidden');
-            gameRechargeModal.classList.remove('flex');
-            gameRechargeModal.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('overflow-hidden');
+        if (!response.ok) {
+          throw new Error(result.error || result.message || `Unable to create order (HTTP ${response.status}).`);
         }
 
-        document.getElementById('game-recharge-nav')?.addEventListener('click', openGameRecharge);
-        document.getElementById('game-recharge-mobile')?.addEventListener('click', () => {
-            mobileMenu?.classList.add('hidden');
-            openGameRecharge();
-        });
-        gameRechargeClose?.addEventListener('click', closeGameRecharge);
-        gameRechargeBackdrop?.addEventListener('click', closeGameRecharge);
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && gameRechargeModal && !gameRechargeModal.classList.contains('hidden')) {
-                closeGameRecharge();
-            }
-        });
+        const checkoutUrl =
+          result.checkoutUrl ||
+          result.checkout_url ||
+          result.payment_url ||
+          result.url ||
+          result.order?.hitpay_checkout_url;
 
-        gameRechargeForm?.addEventListener('submit', (event) => {
-            event.preventDefault();
-            rechargePreviewMessage.textContent =
-                'Preview only: no payment has been taken and no order or Discord notification has been sent. Payment verification must be connected securely before going live.';
-            rechargePreviewMessage.classList.remove('hidden');
-        });
-
-        // Coming Soon Modal
-        const comingSoonModal = document.getElementById('coming-soon-modal');
-        const comingSoonClose = document.getElementById('coming-soon-close');
-        const comingSoonBackdrop = document.getElementById('coming-soon-backdrop');
-
-        function openComingSoon() {
-            comingSoonModal.classList.remove('hidden');
-            comingSoonModal.classList.add('flex');
-        }
-        function closeComingSoon() {
-            comingSoonModal.classList.add('hidden');
-            comingSoonModal.classList.remove('flex');
+        if (!checkoutUrl) {
+          throw new Error('The order was created, but the checkout link was not returned. Please contact support before submitting again.');
         }
 
-        document.querySelectorAll('[data-coming-soon]').forEach(button => {
-            button.addEventListener('click', openComingSoon);
-        });
-        if (comingSoonClose) comingSoonClose.addEventListener('click', closeComingSoon);
-        if (comingSoonBackdrop) comingSoonBackdrop.addEventListener('click', closeComingSoon);
-    </script>
+        if (!/^https:\/\/.+/i.test(checkoutUrl)) {
+          throw new Error('The checkout link is invalid. Please contact support.');
+        }
+
+        showMessage('Order created. Redirecting to the payment checkout...', 'success');
+        window.location.assign(checkoutUrl);
+      } catch (error) {
+        console.error('Recharge checkout error:', error);
+        showMessage(error.message || 'Something went wrong. Please try again.');
+        rechargeSubmit.disabled = false;
+        rechargeSubmitText.textContent = 'Try Again';
+      }
+    });
+  </script>
 </body>
 </html>
