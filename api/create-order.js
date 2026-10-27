@@ -1,132 +1,140 @@
+
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
 
-// LIVE HitPay API URL — huwag palitan ng Sandbox URL.
 const HITPAY_BASE_URL = "https://api.hit-pay.com";
 
-// Pricing configuration
 const USD_PER_GAME_CASH = 0.15;
 const PHP_PER_USD = 64;
 
-// Allowed games and payment methods
 const ALLOWED_GAMES = [
   "LEGEND AEGIS",
   "ASTRAL",
-  "ROM"
+  "ROM",
+  "ROM: REMEMBER OF MAJESTY"
 ];
 
-const ALLOWED_PAYMENT_METHODS = [
-  "ewallet",
-  "binance_usdt",
-  "bank_transfer",
-  "qr_ph"
-];
-
-function getSupabase() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SECRET_KEY;
-
-  if (!url || !key) {
-    throw new Error("Missing Supabase environment variables.");
-  }
-
-  return createClient(url, key, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false
-    }
-  });
-}
+// Tinatanggap ang values ng kasalukuyang HTML form.
+const PAYMENT_METHOD_MAP = {
+  GCASH: "ewallet",
+  MAYA: "ewallet",
+  "BANK TRANSFER": "bank_transfer",
+  "QR PH": "qr_ph",
+  ewallet: "ewallet",
+  bank_transfer: "bank_transfer",
+  qr_ph: "qr_ph"
+};
 
 function getRequiredEnv(name) {
   const value = process.env[name];
 
-  if (!value) {
+  if (!value || !value.trim()) {
     throw new Error(`Missing environment variable: ${name}`);
   }
 
-  return value;
+  return value.trim();
+}
+
+function getSupabase() {
+  return createClient(
+    getRequiredEnv("SUPABASE_URL"),
+    getRequiredEnv("SUPABASE_SECRET_KEY"),
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
+      }
+    }
+  );
+}
+
+function sendError(res, status, message) {
+  return res.status(status).json({
+    success: false,
+    error: message
+  });
 }
 
 export default async function handler(req, res) {
-  // Allow POST requests only
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
+    return sendError(res, 405, "Method not allowed.");
   }
 
   let supabase;
-  let orderId;
+  let orderId = null;
 
   try {
     const apiKey = getRequiredEnv("HITPAY_API_KEY");
     supabase = getSupabase();
 
-    // Read submitted order details
+    // Support JSON request bodies.
+    let body = req.body || {};
+
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        return sendError(res, 400, "Invalid request body.");
+      }
+    }
+
     const {
       game_name,
       game_username,
       customer_email,
       game_cash,
       payment_method
-    } = req.body || {};
+    } = body;
 
-    const gameName = String(game_name || "").trim();
+    const submittedGame = String(game_name || "").trim().toUpperCase();
     const gameUsername = String(game_username || "").trim();
     const email = String(customer_email || "").trim();
     const cash = Number(game_cash);
-    const method = String(payment_method || "").trim();
 
-    // Validate game
-    if (!ALLOWED_GAMES.includes(gameName)) {
-      return res.status(400).json({
-        error: "Invalid game selected."
-      });
+    const submittedMethod = String(payment_method || "")
+      .trim()
+      .toUpperCase();
+
+    if (!ALLOWED_GAMES.includes(submittedGame)) {
+      return sendError(res, 400, "Please select a valid game.");
     }
 
-    // Validate game username
+    if (!gameUsername || gameUsername.length > 100) {
+      return sendError(res, 400, "Please enter a valid game username.");
+    }
+
     if (
-      !gameUsername ||
-      gameUsername.length > 100
+      email.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
     ) {
-      return res.status(400).json({
-        error: "Please enter a valid game username."
-      });
+      return sendError(res, 400, "Please enter a valid email address.");
     }
 
-    // Validate email
-    if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-      email.length > 254
-    ) {
-      return res.status(400).json({
-        error: "Please enter a valid email address."
-      });
-    }
-
-    // Validate Game Cash: 50–5000, increments of 50
     if (
       !Number.isInteger(cash) ||
       cash < 50 ||
       cash > 5000 ||
       cash % 50 !== 0
     ) {
-      return res.status(400).json({
-        error: "Game Cash must be 50–5000 in increments of 50."
-      });
+      return sendError(
+        res,
+        400,
+        "Game Cash must be between 50 and 5000 in increments of 50."
+      );
     }
 
-    // Validate payment method
-    if (!ALLOWED_PAYMENT_METHODS.includes(method)) {
-      return res.status(400).json({
-        error: "Invalid payment method selected."
-      });
+    const method = PAYMENT_METHOD_MAP[submittedMethod];
+
+    if (!method) {
+      return sendError(res, 400, "Please select a valid payment method.");
     }
 
-    // Calculate prices
+    // Store ROM under a consistent game name.
+    const gameName = submittedGame.startsWith("ROM")
+      ? "ROM"
+      : submittedGame;
+
     const priceUSD = Number(
       (cash * USD_PER_GAME_CASH).toFixed(2)
     );
@@ -135,56 +143,53 @@ export default async function handler(req, res) {
       (priceUSD * PHP_PER_USD).toFixed(2)
     );
 
-    // Create unique order number
+    // Correctly formatted order number.
     const orderNumber =
-      `WIZ-${Date.now()}-${randomUUID()
-        .slice(0, 8)
-        .toUpperCase()}`;
+      `WIZ-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
 
-    // Save pending order in Supabase
-    const { data: order, error: insertError } =
-      await supabase
-        .from("game_recharge_orders")
-        .insert({
-          order_number: orderNumber,
-          game_name: gameName,
-          game_username: gameUsername,
-          customer_email: email,
-          game_cash: cash,
-          price_usd: priceUSD,
-          price_php: pricePHP,
-          payment_method: method,
-          payment_status: "pending"
-        })
-        .select()
-        .single();
+    // Step 1: Create a pending order in Supabase.
+    const { data: order, error: insertError } = await supabase
+      .from("game_recharge_orders")
+      .insert({
+        order_number: orderNumber,
+        game_name: gameName,
+        game_username: gameUsername,
+        customer_email: email,
+        game_cash: cash,
+        price_usd: priceUSD,
+        price_php: pricePHP,
+        payment_method: method,
+        payment_status: "pending"
+      })
+      .select("id, order_number")
+      .single();
 
     if (insertError) {
-      console.error("Supabase insert error:", insertError);
-
-      return res.status(500).json({
-        error: "Unable to create your order. Please try again."
+      console.error("Supabase insert error:", {
+        code: insertError.code,
+        message: insertError.message,
+        details: insertError.details,
+        hint: insertError.hint
       });
+
+      return sendError(
+        res,
+        500,
+        "Unable to save your order. Please try again."
+      );
     }
 
     orderId = order.id;
 
-    // Create HitPay Live payment request.
-    // Payment methods must be enabled and supported
-    // by your HitPay account.
+    // Step 2: Request a HitPay checkout.
+    // HitPay will display the payment methods enabled for your account.
     const paymentPayload = {
       amount: pricePHP.toFixed(2),
       currency: "PHP",
-      email: email,
+      email,
       purpose: `WIZ GAMING ${gameName} - ${cash} Game Cash`,
       reference_number: orderNumber,
-      redirect_url:
-        "https://wizgaming.vercel.app/?payment=return",
-      payment_methods: [
-        "gcash",
-        "qrph_netbank",
-        "card"
-      ]
+      redirect_url: "https://wizgaming.vercel.app/?payment=return"
     };
 
     const hitpayResponse = await fetch(
@@ -193,7 +198,8 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "X-BUSINESS-API-KEY": apiKey,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Accept: "application/json"
         },
         body: JSON.stringify(paymentPayload)
       }
@@ -212,45 +218,52 @@ export default async function handler(req, res) {
     if (!hitpayResponse.ok) {
       console.error("HitPay request failed:", {
         status: hitpayResponse.status,
-        error: hitpayData.error || hitpayData.message || responseText
+        error:
+          hitpayData.error ||
+          hitpayData.message ||
+          responseText.slice(0, 1000)
       });
 
-      // Keep the order in the database for troubleshooting.
       await supabase
         .from("game_recharge_orders")
-        .update({
-          payment_status: "failed"
-        })
+        .update({ payment_status: "failed" })
         .eq("id", orderId);
 
-      return res.status(502).json({
-        error: "Unable to create the HitPay checkout. Please try again."
-      });
+      return sendError(
+        res,
+        502,
+        "Unable to create the payment checkout. Please try again."
+      );
     }
 
     const paymentRequestId = hitpayData.id;
-    const checkoutUrl =
-      hitpayData.url || hitpayData.checkout_url;
+    const checkoutUrl = hitpayData.url || hitpayData.checkout_url;
 
-    if (!paymentRequestId || !checkoutUrl) {
-      console.error(
-        "Unexpected HitPay response:",
-        hitpayData
-      );
+    if (
+      !paymentRequestId ||
+      !checkoutUrl ||
+      typeof checkoutUrl !== "string" ||
+      !checkoutUrl.startsWith("https://")
+    ) {
+      console.error("Unexpected HitPay response:", {
+        id: hitpayData.id,
+        hasUrl: Boolean(hitpayData.url),
+        hasCheckoutUrl: Boolean(hitpayData.checkout_url)
+      });
 
       await supabase
         .from("game_recharge_orders")
-        .update({
-          payment_status: "failed"
-        })
+        .update({ payment_status: "failed" })
         .eq("id", orderId);
 
-      return res.status(502).json({
-        error: "HitPay did not return a valid checkout link."
-      });
+      return sendError(
+        res,
+        502,
+        "The payment provider did not return a valid checkout link."
+      );
     }
 
-    // Save HitPay checkout details
+    // Step 3: Save the checkout details.
     const { error: updateError } = await supabase
       .from("game_recharge_orders")
       .update({
@@ -260,14 +273,20 @@ export default async function handler(req, res) {
       .eq("id", orderId);
 
     if (updateError) {
-      console.error("Supabase update error:", updateError);
-
-      return res.status(500).json({
-        error: "Checkout was created, but the order could not be updated. Contact support before retrying."
+      console.error("Supabase checkout update error:", {
+        code: updateError.code,
+        message: updateError.message,
+        details: updateError.details
       });
+
+      return sendError(
+        res,
+        500,
+        "Your checkout was created, but we could not finish saving the order. Contact support before trying again."
+      );
     }
 
-    // Return checkout details to the website
+    // Step 4: Return the checkout URL to the frontend.
     return res.status(200).json({
       success: true,
       order_id: order.id,
@@ -281,11 +300,16 @@ export default async function handler(req, res) {
       checkout_url: checkoutUrl
     });
   } catch (error) {
-    console.error("Create order error:", error);
-
-    return res.status(500).json({
-      error: "A server error occurred while creating your order."
+    // Keep detailed errors in server logs, not in the public response.
+    console.error("Create order error:", {
+      message: error?.message,
+      stack: error?.stack
     });
+
+    return sendError(
+      res,
+      500,
+      "A server error occurred while creating your order. Please try again."
+    );
   }
 }
-```
