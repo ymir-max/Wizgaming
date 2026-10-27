@@ -58,7 +58,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const price = Number((cash * 0.15).toFixed(2));
+    const USD_PER_GAME_CASH = 0.15; const PHP_PER_USD = 64;  const priceUSD = Number(   (cash * USD_PER_GAME_CASH).toFixed(2) );  const pricePHP = Number(   (priceUSD * PHP_PER_USD).toFixed(2) );
 
     const orderNumber =
       "WIZ-" +
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
         game_username: game_username.trim(),
         customer_email: customer_email.trim().toLowerCase(),
         game_cash: cash,
-        price_usd: price,
+        price_php: price,
         payment_method,
         payment_status: "pending"
       })
@@ -96,14 +96,19 @@ export default async function handler(req, res) {
     // 2. Create the HitPay hosted checkout request.
     // Leave payment_methods unspecified so HitPay can return
     // the methods enabled for this account and currency.
-    const paymentPayload = {
-      amount: price.toFixed(2),
-      currency: "USD",
-      email: order.customer_email,
-      purpose: `WIZ GAMING ${game_name} - ${cash} Game Cash`,
-      reference_number: orderNumber,
-      redirect_url: "https://wizgaming.vercel.app/?payment=return"
-    };
+const paymentPayload = {
+  amount: pricePHP.toFixed(2),
+  currency: "PHP",
+  email: order.customer_email,
+  purpose: `WIZ GAMING ${game_name} - ${cash} Game Cash`,
+  reference_number: orderNumber,
+  redirect_url: "https://wizgaming.vercel.app/?payment=return",
+  payment_methods: [
+    "gcash",
+    "qrph_netbank",
+    "card"
+  ]
+};
 
     const hitpayResponse = await fetch(
       `${HITPAY_BASE_URL.replace(/\/+$/, "")}/v1/payment-requests`,
