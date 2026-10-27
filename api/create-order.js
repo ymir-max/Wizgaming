@@ -1,33 +1,55 @@
-import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
+import { randomUUID } from "node:crypto";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SECRET_KEY
-);
+// LIVE HitPay API URL — huwag palitan ng Sandbox URL.
+const HITPAY_BASE_URL = "https://api.hit-pay.com";
 
-// Allowed games
-const GAMES = ["LEGEND AEGIS", "ASTRAL", "ROM"];
+// Pricing configuration
+const USD_PER_GAME_CASH = 0.15;
+const PHP_PER_USD = 64;
 
-// Accepted payment selections from your website
-const METHODS = [
+// Allowed games and payment methods
+const ALLOWED_GAMES = [
+  "LEGEND AEGIS",
+  "ASTRAL",
+  "ROM"
+];
+
+const ALLOWED_PAYMENT_METHODS = [
   "ewallet",
   "binance_usdt",
   "bank_transfer",
   "qr_ph"
 ];
 
-// HitPay Live API base URL
-const HITPAY_BASE_URL =
-  process.env.HITPAY_API_BASE_URL ||
-  "https://api.hit-pay.com";
+function getSupabase() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
 
-// Pricing configuration
-const USD_PER_GAME_CASH = 0.15;
-const PHP_PER_USD = 64;
+  if (!url || !key) {
+    throw new Error("Missing Supabase environment variables.");
+  }
+
+  return createClient(url, key, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false
+    }
+  });
+}
+
+function getRequiredEnv(name) {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`Missing environment variable: ${name}`);
+  }
+
+  return value;
+}
 
 export default async function handler(req, res) {
-  // Only accept POST requests
+  // Allow POST requests only
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
 
@@ -36,18 +58,14 @@ export default async function handler(req, res) {
     });
   }
 
-  // Check required environment variables
-  if (
-    !process.env.SUPABASE_URL ||
-    !process.env.SUPABASE_SECRET_KEY ||
-    !process.env.HITPAY_API_KEY
-  ) {
-    return res.status(500).json({
-      error: "Server configuration is incomplete"
-    });
-  }
+  let supabase;
+  let orderId;
 
   try {
+    const apiKey = getRequiredEnv("HITPAY_API_KEY");
+    supabase = getSupabase();
+
+    // Read submitted order details
     const {
       game_name,
       game_username,
@@ -56,30 +74,59 @@ export default async function handler(req, res) {
       payment_method
     } = req.body || {};
 
+    const gameName = String(game_name || "").trim();
+    const gameUsername = String(game_username || "").trim();
+    const email = String(customer_email || "").trim();
     const cash = Number(game_cash);
+    const method = String(payment_method || "").trim();
 
-    // Validate order details
-    if (
-      !GAMES.includes(game_name) ||
-      typeof game_username !== "string" ||
-      game_username.trim().length < 1 ||
-      game_username.trim().length > 100 ||
-      typeof customer_email !== "string" ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        customer_email.trim()
-      ) ||
-      !Number.isInteger(cash) ||
-      cash < 50 ||
-      cash > 5000 ||
-      cash % 50 !== 0 ||
-      !METHODS.includes(payment_method)
-    ) {
+    // Validate game
+    if (!ALLOWED_GAMES.includes(gameName)) {
       return res.status(400).json({
-        error: "Invalid order details"
+        error: "Invalid game selected."
       });
     }
 
-    // Calculate USD reference price and PHP checkout price
+    // Validate game username
+    if (
+      !gameUsername ||
+      gameUsername.length > 100
+    ) {
+      return res.status(400).json({
+        error: "Please enter a valid game username."
+      });
+    }
+
+    // Validate email
+    if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+      email.length > 254
+    ) {
+      return res.status(400).json({
+        error: "Please enter a valid email address."
+      });
+    }
+
+    // Validate Game Cash: 50–5000, increments of 50
+    if (
+      !Number.isInteger(cash) ||
+      cash < 50 ||
+      cash > 5000 ||
+      cash % 50 !== 0
+    ) {
+      return res.status(400).json({
+        error: "Game Cash must be 50–5000 in increments of 50."
+      });
+    }
+
+    // Validate payment method
+    if (!ALLOWED_PAYMENT_METHODS.includes(method)) {
+      return res.status(400).json({
+        error: "Invalid payment method selected."
+      });
+    }
+
+    // Calculate prices
     const priceUSD = Number(
       (cash * USD_PER_GAME_CASH).toFixed(2)
     );
@@ -88,52 +135,48 @@ export default async function handler(req, res) {
       (priceUSD * PHP_PER_USD).toFixed(2)
     );
 
+    // Create unique order number
     const orderNumber =
-      "WIZ-" +
-      randomUUID()
-        .replaceAll("-", "")
-        .slice(0, 12)
-        .toUpperCase();
+      `WIZ-${Date.now()}-${randomUUID()
+        .slice(0, 8)
+        .toUpperCase()}`;
 
-    // 1. Create pending order in Supabase
+    // Save pending order in Supabase
     const { data: order, error: insertError } =
       await supabase
         .from("game_recharge_orders")
         .insert({
           order_number: orderNumber,
-          game_name,
-          game_username: game_username.trim(),
-          customer_email: customer_email
-            .trim()
-            .toLowerCase(),
+          game_name: gameName,
+          game_username: gameUsername,
+          customer_email: email,
           game_cash: cash,
           price_usd: priceUSD,
           price_php: pricePHP,
-          payment_method,
+          payment_method: method,
           payment_status: "pending"
         })
-        .select(
-          "order_number, game_name, game_username, customer_email, game_cash, price_usd, price_php, payment_method, payment_status"
-        )
+        .select()
         .single();
 
     if (insertError) {
-      console.error(
-        "Order creation failed:",
-        insertError.message
-      );
+      console.error("Supabase insert error:", insertError);
 
       return res.status(500).json({
-        error: "Could not create order"
+        error: "Unable to create your order. Please try again."
       });
     }
 
-    // 2. Request HitPay hosted checkout in PHP
+    orderId = order.id;
+
+    // Create HitPay Live payment request.
+    // Payment methods must be enabled and supported
+    // by your HitPay account.
     const paymentPayload = {
       amount: pricePHP.toFixed(2),
       currency: "PHP",
-      email: order.customer_email,
-      purpose: `WIZ GAMING ${game_name} - ${cash} Game Cash`,
+      email: email,
+      purpose: `WIZ GAMING ${gameName} - ${cash} Game Cash`,
       reference_number: orderNumber,
       redirect_url:
         "https://wizgaming.vercel.app/?payment=return",
@@ -145,82 +188,103 @@ export default async function handler(req, res) {
     };
 
     const hitpayResponse = await fetch(
-      `${HITPAY_BASE_URL.replace(/\/+$/, "")}/v1/payment-requests`,
+      `${HITPAY_BASE_URL}/v1/payment-requests`,
       {
         method: "POST",
         headers: {
-          "X-BUSINESS-API-KEY":
-            process.env.HITPAY_API_KEY,
+          "X-BUSINESS-API-KEY": apiKey,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(paymentPayload)
       }
     );
 
-    const payment = await hitpayResponse
-      .json()
-      .catch(() => ({}));
+    const responseText = await hitpayResponse.text();
 
-    // Check whether HitPay created the checkout
-    if (
-      !hitpayResponse.ok ||
-      !payment.id ||
-      !payment.url
-    ) {
+    let hitpayData;
+
+    try {
+      hitpayData = JSON.parse(responseText);
+    } catch {
+      hitpayData = {};
+    }
+
+    if (!hitpayResponse.ok) {
       console.error("HitPay request failed:", {
         status: hitpayResponse.status,
-        error:
-          payment.message ||
-          payment.error ||
-          "Unknown HitPay error"
+        error: hitpayData.error || hitpayData.message || responseText
       });
 
+      // Keep the order in the database for troubleshooting.
+      await supabase
+        .from("game_recharge_orders")
+        .update({
+          payment_status: "failed"
+        })
+        .eq("id", orderId);
+
       return res.status(502).json({
-        error: "HitPay could not create checkout",
-        order_number: orderNumber,
-        hitpay_status: hitpayResponse.status
+        error: "Unable to create the HitPay checkout. Please try again."
       });
     }
 
-    // 3. Save HitPay checkout details in Supabase
+    const paymentRequestId = hitpayData.id;
+    const checkoutUrl =
+      hitpayData.url || hitpayData.checkout_url;
+
+    if (!paymentRequestId || !checkoutUrl) {
+      console.error(
+        "Unexpected HitPay response:",
+        hitpayData
+      );
+
+      await supabase
+        .from("game_recharge_orders")
+        .update({
+          payment_status: "failed"
+        })
+        .eq("id", orderId);
+
+      return res.status(502).json({
+        error: "HitPay did not return a valid checkout link."
+      });
+    }
+
+    // Save HitPay checkout details
     const { error: updateError } = await supabase
       .from("game_recharge_orders")
       .update({
-        hitpay_payment_request_id: String(payment.id),
-        hitpay_checkout_url: payment.url
+        hitpay_payment_request_id: String(paymentRequestId),
+        hitpay_checkout_url: checkoutUrl
       })
-      .eq("order_number", orderNumber);
+      .eq("id", orderId);
 
     if (updateError) {
-      console.error(
-        "Saving HitPay checkout failed:",
-        updateError.message
-      );
+      console.error("Supabase update error:", updateError);
 
       return res.status(500).json({
-        error: "Checkout created but could not be saved",
-        order_number: orderNumber
+        error: "Checkout was created, but the order could not be updated. Contact support before retrying."
       });
     }
 
-    // 4. Return order details and checkout URL
-    // Payment status stays pending until verified server-side.
-    return res.status(201).json({
-      order: {
-        ...order,
-        hitpay_payment_request_id: String(payment.id)
-      },
-      checkout_url: payment.url
+    // Return checkout details to the website
+    return res.status(200).json({
+      success: true,
+      order_id: order.id,
+      order_number: orderNumber,
+      game_name: gameName,
+      game_username: gameUsername,
+      game_cash: cash,
+      price_usd: priceUSD,
+      price_php: pricePHP,
+      currency: "PHP",
+      checkout_url: checkoutUrl
     });
-
   } catch (error) {
-    console.error(
-      "Unexpected order error:",
-      error.message
-    );
+    console.error("Create order error:", error);
 
     return res.status(500).json({
-      error: "Server error"
+      error: "A server error occurred while creating your order."
     });
   }
 }
