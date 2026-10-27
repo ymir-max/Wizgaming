@@ -1,6 +1,3 @@
-```javascript
-// api/create-order.js
-
 import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
