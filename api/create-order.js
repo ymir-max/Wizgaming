@@ -14,22 +14,6 @@ const ALLOWED_GAMES = [
   "ROM: REMEMBER OF MAJESTY"
 ];
 
-// Tinatanggap ang values mula sa HTML payment form.
-const PAYMENT_METHOD_MAP = {
-  "GCASH / MAYA": "ewallet",
-  "GCASH": "ewallet",
-  "MAYA": "ewallet",
-  "QR PH": "qr_ph",
-  "BANK": "bank_transfer",
-  "BANK TRANSFER": "bank_transfer",
-  "USDT": "binance_usdt",
-  "BINANCE USDT": "binance_usdt",
-  "EWALLET": "ewallet",
-  "QR_PH": "qr_ph",
-  "BANK_TRANSFER": "bank_transfer",
-  "BINANCE_USDT": "binance_usdt"
-};
-
 function getRequiredEnv(name) {
   const value = process.env[name];
 
@@ -97,9 +81,6 @@ export default async function handler(req, res) {
     const cashInput =
       body.game_cash ?? body.amount;
 
-    const paymentMethodInput =
-      body.payment_method ?? "";
-
     const submittedGame = String(gameNameInput)
       .trim()
       .toUpperCase();
@@ -107,12 +88,6 @@ export default async function handler(req, res) {
     const gameUsername = String(gameUsernameInput).trim();
     const email = String(emailInput).trim();
     const cash = Number(cashInput);
-
-    const submittedMethod = String(paymentMethodInput)
-      .trim()
-      .toUpperCase();
-
-    const method = PAYMENT_METHOD_MAP[submittedMethod];
 
     if (!ALLOWED_GAMES.includes(submittedGame)) {
       return sendError(res, 400, "Please select a valid game.");
@@ -150,14 +125,6 @@ export default async function handler(req, res) {
       );
     }
 
-    if (!method) {
-      return sendError(
-        res,
-        400,
-        "Please select a valid payment method."
-      );
-    }
-
     // Normalize the game name before saving.
     const gameName = submittedGame.startsWith("ROM")
       ? "ROM"
@@ -187,7 +154,7 @@ export default async function handler(req, res) {
         game_cash: cash,
         price_usd: priceUSD,
         price_php: pricePHP,
-        payment_method: method,
+        payment_method: "hitpay",
         payment_status: "pending"
       })
       .select("id, order_number")
@@ -211,7 +178,7 @@ export default async function handler(req, res) {
     orderId = order.id;
 
     // STEP 2: Create the HitPay checkout.
-    // The final payment methods depend on your HitPay account.
+    // Customer picks the payment method on the HitPay checkout page.
     const paymentPayload = {
       amount: pricePHP.toFixed(2),
       currency: "PHP",
