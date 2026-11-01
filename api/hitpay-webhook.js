@@ -1,4 +1,3 @@
-
 import { createClient } from "@supabase/supabase-js";
 import { createHmac, timingSafeEqual } from "node:crypto";
 
@@ -83,6 +82,55 @@ function sameAmount(actual, expected) {
     Math.round(actualNumber * 100) ===
       Math.round(expectedNumber * 100)
   );
+}
+
+// Sends a notification to the Discord channel via a Discord webhook.
+// Failures are logged only; they must never fail the HitPay webhook.
+async function notifyDiscord(order, paymentRequestId) {
+  const url = process.env.DISCORD_WEBHOOK_URL?.trim();
+
+  if (!url) {
+    console.warn("DISCORD_WEBHOOK_URL is not set; skipping Discord notification.");
+    return;
+  }
+
+  const clip = (value, max = 200) =>
+    String(value ?? "-").slice(0, max) || "-";
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(5000),
+      body: JSON.stringify({
+        username: "WIZ GAMING Orders",
+        // Prevent user-supplied text from pinging anyone.
+        allowed_mentions: { parse: [] },
+        embeds: [
+          {
+            title: "✅ New Paid Order",
+            color: 0x22c55e,
+            fields: [
+              { name: "Game", value: clip(order.game_name), inline: true },
+              { name: "Game Cash", value: clip(order.game_cash), inline: true },
+              { name: "Amount Paid", value: `₱${Number(order.price_php).toFixed(2)}`, inline: true },
+              { name: "In-game Username", value: clip(order.game_username) },
+              { name: "Email", value: clip(order.customer_email) },
+              { name: "Order Number", value: clip(order.order_number) },
+              { name: "HitPay Reference", value: clip(paymentRequestId) }
+            ],
+            timestamp: new Date().toISOString()
+          }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      console.error("Discord notification failed:", response.status);
+    }
+  } catch (error) {
+    console.error("Discord notification error:", error?.message);
+  }
 }
 
 export default async function handler(req, res) {
@@ -203,7 +251,7 @@ export default async function handler(req, res) {
     const { data: order, error: lookupError } = await supabase
       .from("game_recharge_orders")
       .select(
-        "id, order_number, price_php, payment_status, hitpay_payment_request_id"
+        "id, order_number, game_name, game_username, customer_email, game_cash, price_php, payment_status, hitpay_payment_request_id"
       )
       .eq("order_number", orderNumber)
       .maybeSingle();
@@ -304,6 +352,9 @@ export default async function handler(req, res) {
     }
 
     console.info("WIZ GAMING payment verified:", orderNumber);
+
+    // Only reached once per order, so Discord is never spammed by retries.
+    await notifyDiscord(order, paymentRequestId);
 
     return res.status(200).json({
       success: true,
