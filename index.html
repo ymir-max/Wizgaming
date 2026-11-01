@@ -109,25 +109,6 @@
       box-shadow: 0 0 0 1px #F59E0B;
     }
     .form-control option { background: #141419; color: white; }
-    .payment-choice input:checked + span {
-      border-color: #F59E0B;
-      background: rgba(245,158,11,.12);
-      color: #FBBF24;
-    }
-    .payment-choice span {
-      min-height: 92px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      border: 1px solid #3f3f46;
-      border-radius: .75rem;
-      background: rgba(0,0,0,.2);
-      padding: .75rem;
-      text-align: center;
-      transition: .2s ease;
-    }
     button:disabled { opacity: .6; cursor: not-allowed; }
     [hidden] { display: none !important; }
   </style>
@@ -383,29 +364,6 @@
           <strong id="recharge-total" class="font-heading text-xl sm:text-2xl text-brand-gold">₱0.00</strong>
         </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-gray-200 mb-2">Preferred Payment Method</label>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <label class="payment-choice cursor-pointer">
-              <input class="sr-only" type="radio" name="payment_method" value="ewallet" required>
-              <span><i class="fa-solid fa-mobile-screen-button text-xl"></i><b class="text-xs">GCASH / MAYA</b></span>
-            </label>
-            <label class="payment-choice cursor-pointer">
-              <input class="sr-only" type="radio" name="payment_method" value="qr_ph">
-              <span><i class="fa-solid fa-qrcode text-xl"></i><b class="text-xs">QR PH</b></span>
-            </label>
-            <label class="payment-choice cursor-pointer">
-              <input class="sr-only" type="radio" name="payment_method" value="bank_transfer">
-              <span><i class="fa-solid fa-building-columns text-xl"></i><b class="text-xs">BANK</b></span>
-            </label>
-            <label class="payment-choice cursor-pointer">
-              <input class="sr-only" type="radio" name="payment_method" value="binance_usdt">
-              <span><i class="fa-brands fa-bitcoin text-xl"></i><b class="text-xs">USDT</b></span>
-            </label>
-          </div>
-          <p class="text-xs text-gray-500 mt-2">Available payment options at checkout depend on the payment methods enabled in your HitPay account. The selected preference is saved with your order.</p>
-        </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="recharge-username" class="block text-sm font-semibold text-gray-200 mb-2">In-game Username</label>
@@ -611,9 +569,8 @@
       const cash = Number(rechargeAmount.value);
       const username = document.getElementById('recharge-username').value.trim();
       const email = document.getElementById('recharge-email').value.trim();
-      const paymentMethod = rechargeForm.querySelector('input[name="payment_method"]:checked')?.value;
 
-      if (!game || !cash || !username || !email || !paymentMethod) {
+      if (!game || !cash || !username || !email) {
         showMessage('Please complete all required fields.');
         return;
       }
@@ -634,8 +591,7 @@
             game_name: game,
             game_username: username,
             customer_email: email,
-            game_cash: cash,
-            payment_method: paymentMethod
+            game_cash: cash
           })
         });
 
