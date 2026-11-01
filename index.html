@@ -386,6 +386,23 @@
           </div>
         </div>
 
+        <div class="rounded-xl border border-white/10 bg-black/20 p-4">
+          <details class="group mb-3">
+            <summary class="cursor-pointer text-sm font-semibold text-brand-gold select-none">Read the Terms &amp; Conditions</summary>
+            <ul class="mt-3 space-y-2 text-xs text-gray-400 list-disc pl-5">
+              <li><strong class="text-gray-300">Check your username.</strong> Game Cash is delivered to the exact in-game username you enter. We are not responsible for recharges sent to a wrong or mistyped username.</li>
+              <li><strong class="text-gray-300">No refunds once processed.</strong> All sales are final. Once your recharge has been processed, it cannot be cancelled or refunded.</li>
+              <li><strong class="text-gray-300">If something goes wrong on our side.</strong> If you were charged but we are unable to deliver your recharge, we will complete the recharge or refund your payment.</li>
+              <li><strong class="text-gray-300">Delivery.</strong> Recharges are processed after your payment is verified. Processing time may vary, and you will receive an email once the recharge is complete.</li>
+              <li><strong class="text-gray-300">Payments.</strong> Payments are handled securely by HitPay. Your order is only confirmed after the payment has been verified by our server.</li>
+            </ul>
+          </details>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input id="recharge-terms" name="terms" type="checkbox" required class="mt-1 h-4 w-4 shrink-0 accent-amber-500">
+            <span class="text-sm text-gray-300">I have checked my in-game username, and I agree to the Terms &amp; Conditions, including that <strong class="text-white">no refunds are allowed once the recharge is processed</strong>.</span>
+          </label>
+        </div>
+
         <div id="recharge-message" class="hidden text-sm rounded-xl p-3" role="status" aria-live="polite"></div>
 
         <button id="recharge-submit" type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all">
@@ -592,6 +609,12 @@
       const cash = Number(rechargeAmount.value);
       const username = document.getElementById('recharge-username').value.trim();
       const email = document.getElementById('recharge-email').value.trim();
+      const acceptedTerms = document.getElementById('recharge-terms').checked;
+
+      if (!acceptedTerms) {
+        showMessage('Please agree to the Terms & Conditions to continue.');
+        return;
+      }
 
       if (!game || !cash || !username || !email) {
         showMessage('Please complete all required fields.');
@@ -616,7 +639,8 @@
             game_name: game,
             game_username: username,
             customer_email: email,
-            game_cash: cash
+            game_cash: cash,
+            accepted_terms: acceptedTerms
           })
         });
 
