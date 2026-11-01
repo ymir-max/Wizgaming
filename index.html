@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -321,6 +320,18 @@
     </div>
   </div>
 
+  <!-- PAYMENT RETURN MODAL -->
+  <div id="payment-return-modal" class="fixed inset-0 z-[140] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="payment-return-title">
+    <div class="modal-backdrop absolute inset-0" data-close="payment-return"></div>
+    <div class="relative w-full max-w-md bg-brand-card border border-brand-gold/40 rounded-2xl shadow-neon-gold p-6 text-center">
+      <div id="payment-return-icon" class="text-4xl mb-3 text-brand-gold"><i class="fa-solid fa-spinner fa-spin"></i></div>
+      <h2 id="payment-return-title" class="font-heading font-black text-2xl">Confirming your payment…</h2>
+      <p id="payment-return-text" class="text-sm text-gray-300 mt-3">Please wait while we confirm your payment. Do not close this page.</p>
+      <p id="payment-return-order" class="text-xs text-gray-500 mt-4 break-all"></p>
+      <button type="button" id="payment-return-ok" data-close="payment-return" class="hidden mt-6 w-full bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold uppercase px-6 py-3.5 rounded-xl">Got It</button>
+    </div>
+  </div>
+
   <!-- GAME RECHARGE MODAL -->
   <div id="game-recharge-modal" class="fixed inset-0 z-[130] hidden items-center justify-center p-3 sm:p-5" aria-hidden="true">
     <div id="game-recharge-backdrop" class="modal-backdrop absolute inset-0"></div>
@@ -345,6 +356,7 @@
             <option value="LEGEND AEGIS">MIR4 — LEGEND AEGIS</option>
             <option value="ASTRAL">ASTRAL</option>
             <option value="ROM">ROM: REMEMBER OF MAJESTY</option>
+            <option value="TEST">TEST — ₱5 payment test</option><!-- TEMPORARY: remove when done testing -->
           </select>
         </div>
 
@@ -490,14 +502,36 @@
       return { usd, php };
     }
 
-    for (let cash = 50; cash <= 5000; cash += 50) {
-      const price = getPrice(cash);
+    const rechargeGame = document.getElementById('recharge-game');
+    const TEST_PRICE_PHP = 5; // TEMPORARY test product (game "TEST")
+
+    function addAmountOption(cash, label, price) {
       const option = document.createElement('option');
       option.value = String(cash);
-      option.textContent = `${cash.toLocaleString()} Game Cash — ${formatPHP(price.php)}`;
+      option.textContent = label;
       option.dataset.usd = price.usd.toFixed(2);
       option.dataset.php = price.php.toFixed(2);
       rechargeAmount.appendChild(option);
+    }
+
+    function populateAmounts(game) {
+      rechargeAmount.innerHTML = '<option value="" disabled selected>Choose Game Cash</option>';
+
+      if (game === 'TEST') {
+        addAmountOption(
+          1,
+          `Test Payment — ${formatPHP(TEST_PRICE_PHP)}`,
+          { usd: Number((TEST_PRICE_PHP / PHP_PER_USD).toFixed(2)), php: TEST_PRICE_PHP }
+        );
+        rechargeAmount.selectedIndex = 1;
+      } else {
+        for (let cash = 50; cash <= 5000; cash += 50) {
+          const price = getPrice(cash);
+          addAmountOption(cash, `${cash.toLocaleString()} Game Cash — ${formatPHP(price.php)}`, price);
+        }
+      }
+
+      updatePrice();
     }
 
     function updatePrice() {
@@ -513,6 +547,8 @@
     }
 
     rechargeAmount.addEventListener('change', updatePrice);
+    rechargeGame.addEventListener('change', () => populateAmounts(rechargeGame.value));
+    populateAmounts('');
 
     function showMessage(message, type = 'error') {
       rechargeMessage.textContent = message;
@@ -575,7 +611,11 @@
         return;
       }
 
-      if (cash < 50 || cash > 5000 || cash % 50 !== 0) {
+      const validAmount = game === 'TEST'
+        ? cash === 1
+        : !(cash < 50 || cash > 5000 || cash % 50 !== 0);
+
+      if (!validAmount) {
         showMessage('Please select a valid Game Cash amount.');
         return;
       }
@@ -636,6 +676,70 @@
         rechargeSubmitText.textContent = 'Try Again';
       }
     });
+
+    // Payment return popup (HitPay redirects back to /?payment=return&order=WIZ-...)
+    (function handlePaymentReturn() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('payment') !== 'return') return;
+
+      const order = params.get('order') || '';
+      const icon = document.getElementById('payment-return-icon');
+      const title = document.getElementById('payment-return-title');
+      const text = document.getElementById('payment-return-text');
+      const orderLabel = document.getElementById('payment-return-order');
+      const okButton = document.getElementById('payment-return-ok');
+
+      // Remove the query string so a refresh does not repeat the popup.
+      history.replaceState(null, '', window.location.pathname);
+
+      document.querySelectorAll('[data-close="payment-return"]').forEach(el => {
+        el.addEventListener('click', () => closeModal('payment-return-modal'));
+      });
+
+      if (!/^WIZ-\d{10,16}-[A-F0-9]{8}$/.test(order)) return;
+
+      orderLabel.textContent = `Order: ${order}`;
+      openModal('payment-return-modal');
+
+      function showFinal(kind) {
+        okButton.classList.remove('hidden');
+        if (kind === 'paid') {
+          icon.className = 'text-4xl mb-3 text-emerald-400';
+          icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+          title.textContent = 'Payment Received!';
+          text.textContent = 'Thank you! You will receive an email once the recharge is complete.';
+        } else if (kind === 'failed') {
+          icon.className = 'text-4xl mb-3 text-red-400';
+          icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+          title.textContent = 'Payment Not Completed';
+          text.textContent = 'We did not receive your payment. You can try again from the recharge form.';
+        } else {
+          icon.className = 'text-4xl mb-3 text-brand-gold';
+          icon.innerHTML = '<i class="fa-solid fa-clock"></i>';
+          title.textContent = 'Still Confirming';
+          text.textContent = 'We have not received the confirmation yet. If you already paid, you will receive an email once the recharge is complete.';
+        }
+      }
+
+      let attempts = 0;
+      const MAX_ATTEMPTS = 20; // about 80 seconds
+
+      async function check() {
+        attempts += 1;
+        try {
+          const response = await fetch(`/api/order-status?order=${encodeURIComponent(order)}`, { cache: 'no-store' });
+          const result = await response.json();
+          if (result.status === 'paid') return showFinal('paid');
+          if (result.status === 'failed') return showFinal('failed');
+        } catch (error) {
+          console.error('Payment status check failed:', error);
+        }
+        if (attempts >= MAX_ATTEMPTS) return showFinal('timeout');
+        setTimeout(check, 4000);
+      }
+
+      check();
+    })();
   </script>
 </body>
 </html>
