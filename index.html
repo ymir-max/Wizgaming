@@ -111,6 +111,7 @@
     button:disabled { opacity: .6; cursor: not-allowed; }
     [hidden] { display: none !important; }
   </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 </head>
 
 <body class="bg-aegis min-h-screen flex flex-col selection:bg-brand-gold selection:text-black">
@@ -403,6 +404,13 @@
           </label>
         </div>
 
+        <!-- Bot trap: real people never see or fill this field -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+          <label>Leave this field empty<input id="recharge-website" name="website" type="text" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <div id="turnstile-box" class="flex justify-center"></div>
+
         <div id="recharge-message" class="hidden text-sm rounded-xl p-3" role="status" aria-live="polite"></div>
 
         <button id="recharge-submit" type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-amber-600 text-black font-heading font-bold text-sm uppercase px-6 py-4 rounded-xl shadow-neon-gold transition-all">
@@ -571,7 +579,40 @@
       rechargeMessage.textContent = '';
     }
 
+    // Cloudflare Turnstile (bot protection).
+    // Paste your Turnstile SITE key below (the public one; it is safe to put in HTML).
+    // While it is still the placeholder, the widget is skipped.
+    const TURNSTILE_SITE_KEY = '0x4AAAAAAFvSDT93DFeoqh9j';
+    const turnstileEnabled = !TURNSTILE_SITE_KEY.startsWith('PASTE_');
+    let turnstileWidgetId = null;
+    let turnstileToken = '';
+
+    function renderTurnstile(attempt = 0) {
+      if (!turnstileEnabled || turnstileWidgetId !== null) return;
+
+      if (!window.turnstile) {
+        if (attempt < 20) setTimeout(() => renderTurnstile(attempt + 1), 300);
+        return;
+      }
+
+      turnstileWidgetId = window.turnstile.render('#turnstile-box', {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: 'dark',
+        callback: token => { turnstileToken = token; },
+        'expired-callback': () => { turnstileToken = ''; },
+        'error-callback': () => { turnstileToken = ''; }
+      });
+    }
+
+    function resetTurnstile() {
+      turnstileToken = '';
+      if (turnstileWidgetId !== null && window.turnstile) {
+        window.turnstile.reset(turnstileWidgetId);
+      }
+    }
+
     function openRecharge() {
+      renderTurnstile();
       openModal('game-recharge-modal');
       rechargeModal.setAttribute('aria-hidden', 'false');
     }
@@ -611,6 +652,11 @@
       const email = document.getElementById('recharge-email').value.trim();
       const acceptedTerms = document.getElementById('recharge-terms').checked;
 
+      if (turnstileEnabled && !turnstileToken) {
+        showMessage('Please complete the verification first.');
+        return;
+      }
+
       if (!acceptedTerms) {
         showMessage('Please agree to the Terms & Conditions to continue.');
         return;
@@ -640,7 +686,9 @@
             game_username: username,
             customer_email: email,
             game_cash: cash,
-            accepted_terms: acceptedTerms
+            accepted_terms: acceptedTerms,
+            turnstile_token: turnstileToken,
+            website: document.getElementById('recharge-website').value
           })
         });
 
@@ -680,6 +728,7 @@
         window.location.assign(checkoutUrl);
       } catch (error) {
         console.error('Recharge checkout error:', error);
+        resetTurnstile();
         showMessage(error.message || 'Something went wrong. Please try again.');
         rechargeSubmit.disabled = false;
         rechargeSubmitText.textContent = 'Try Again';
