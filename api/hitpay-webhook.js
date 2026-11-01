@@ -9,6 +9,10 @@ export const config = {
 
 const MAX_BODY_SIZE = 1024 * 1024;
 
+// Defaults to PHP. Set HITPAY_CURRENCY=SGD in Vercel only for sandbox testing.
+const EXPECTED_CURRENCY =
+  (process.env.HITPAY_CURRENCY?.trim() || "PHP").toUpperCase();
+
 function requiredEnv(name) {
   const value = process.env[name];
 
@@ -302,7 +306,7 @@ export default async function handler(req, res) {
 
     // Verify the amount and currency before marking paid.
     if (
-      currency !== "PHP" ||
+      currency !== EXPECTED_CURRENCY ||
       !sameAmount(amount, order.price_php)
     ) {
       console.error("Webhook amount/currency mismatch:", {
