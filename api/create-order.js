@@ -130,6 +130,15 @@ export default async function handler(req, res) {
       );
     }
 
+    // The customer must agree to the Terms & Conditions (no refunds once processed).
+    if (body.accepted_terms !== true) {
+      return sendError(
+        res,
+        400,
+        "Please agree to the Terms & Conditions to continue."
+      );
+    }
+
     // Normalize the game name before saving.
     const gameName = submittedGame.startsWith("ROM")
       ? "ROM"
