@@ -1,7 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
 
-const HITPAY_BASE_URL = "https://api.hit-pay.com";
+// Defaults are PRODUCTION. For sandbox testing, set these in Vercel:
+//   HITPAY_API_URL=https://api.sandbox.hit-pay.com
+//   HITPAY_CURRENCY=SGD
+const HITPAY_BASE_URL =
+  process.env.HITPAY_API_URL?.trim() || "https://api.hit-pay.com";
+const HITPAY_CURRENCY =
+  (process.env.HITPAY_CURRENCY?.trim() || "PHP").toUpperCase();
 
 const USD_PER_GAME_CASH = 0.15;
 const PHP_PER_USD = 64;
@@ -191,7 +197,7 @@ export default async function handler(req, res) {
     // Customer picks the payment method on the HitPay checkout page.
     const paymentPayload = {
       amount: pricePHP.toFixed(2),
-      currency: "PHP",
+      currency: HITPAY_CURRENCY,
       email: email,
       purpose: `WIZ GAMING ${gameName} - ${cash} Game Cash`,
       reference_number: orderNumber,
