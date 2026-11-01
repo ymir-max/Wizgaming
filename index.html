@@ -356,7 +356,6 @@
             <option value="LEGEND AEGIS">MIR4 — LEGEND AEGIS</option>
             <option value="ASTRAL">ASTRAL</option>
             <option value="ROM">ROM: REMEMBER OF MAJESTY</option>
-            <option value="TEST">TEST — ₱5 payment test</option><!-- TEMPORARY: remove when done testing -->
           </select>
         </div>
 
@@ -502,8 +501,6 @@
       return { usd, php };
     }
 
-    const rechargeGame = document.getElementById('recharge-game');
-    const TEST_PRICE_PHP = 5; // TEMPORARY test product (game "TEST")
 
     function addAmountOption(cash, label, price) {
       const option = document.createElement('option');
@@ -514,21 +511,12 @@
       rechargeAmount.appendChild(option);
     }
 
-    function populateAmounts(game) {
+    function populateAmounts() {
       rechargeAmount.innerHTML = '<option value="" disabled selected>Choose Game Cash</option>';
 
-      if (game === 'TEST') {
-        addAmountOption(
-          1,
-          `Test Payment — ${formatPHP(TEST_PRICE_PHP)}`,
-          { usd: Number((TEST_PRICE_PHP / PHP_PER_USD).toFixed(2)), php: TEST_PRICE_PHP }
-        );
-        rechargeAmount.selectedIndex = 1;
-      } else {
-        for (let cash = 50; cash <= 5000; cash += 50) {
-          const price = getPrice(cash);
-          addAmountOption(cash, `${cash.toLocaleString()} Game Cash — ${formatPHP(price.php)}`, price);
-        }
+      for (let cash = 50; cash <= 5000; cash += 50) {
+        const price = getPrice(cash);
+        addAmountOption(cash, `${cash.toLocaleString()} Game Cash — ${formatPHP(price.php)}`, price);
       }
 
       updatePrice();
@@ -547,8 +535,7 @@
     }
 
     rechargeAmount.addEventListener('change', updatePrice);
-    rechargeGame.addEventListener('change', () => populateAmounts(rechargeGame.value));
-    populateAmounts('');
+    populateAmounts();
 
     function showMessage(message, type = 'error') {
       rechargeMessage.textContent = message;
@@ -611,9 +598,7 @@
         return;
       }
 
-      const validAmount = game === 'TEST'
-        ? cash === 1
-        : !(cash < 50 || cash > 5000 || cash % 50 !== 0);
+      const validAmount = !(cash < 50 || cash > 5000 || cash % 50 !== 0);
 
       if (!validAmount) {
         showMessage('Please select a valid Game Cash amount.');
