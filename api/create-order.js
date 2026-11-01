@@ -1,4 +1,3 @@
-
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
 
@@ -11,8 +10,13 @@ const ALLOWED_GAMES = [
   "LEGEND AEGIS",
   "ASTRAL",
   "ROM",
-  "ROM: REMEMBER OF MAJESTY"
+  "ROM: REMEMBER OF MAJESTY",
+  "TEST" // TEMPORARY: payment test (fixed PHP 5). Remove when done testing.
 ];
+
+// TEMPORARY test product: 1 "Game Cash" costs a fixed PHP 5.00.
+const TEST_GAME = "TEST";
+const TEST_PRICE_PHP = 5;
 
 function getRequiredEnv(name) {
   const value = process.env[name];
@@ -112,11 +116,17 @@ export default async function handler(req, res) {
       );
     }
 
+    const isTest = submittedGame === TEST_GAME;
+
     if (
-      !Number.isInteger(cash) ||
-      cash < 50 ||
-      cash > 5000 ||
-      cash % 50 !== 0
+      isTest
+        ? cash !== 1
+        : (
+            !Number.isInteger(cash) ||
+            cash < 50 ||
+            cash > 5000 ||
+            cash % 50 !== 0
+          )
     ) {
       return sendError(
         res,
@@ -131,13 +141,13 @@ export default async function handler(req, res) {
       : submittedGame;
 
     // Server-side price calculation.
-    const priceUSD = Number(
-      (cash * USD_PER_GAME_CASH).toFixed(2)
-    );
+    const priceUSD = isTest
+      ? Number((TEST_PRICE_PHP / PHP_PER_USD).toFixed(2))
+      : Number((cash * USD_PER_GAME_CASH).toFixed(2));
 
-    const pricePHP = Number(
-      (priceUSD * PHP_PER_USD).toFixed(2)
-    );
+    const pricePHP = isTest
+      ? TEST_PRICE_PHP
+      : Number((priceUSD * PHP_PER_USD).toFixed(2));
 
     // Generate a unique order number.
     const orderNumber =
@@ -185,7 +195,7 @@ export default async function handler(req, res) {
       email: email,
       purpose: `WIZ GAMING ${gameName} - ${cash} Game Cash`,
       reference_number: orderNumber,
-      redirect_url: "https://wizgaming.vercel.app/?payment=return"
+      redirect_url: `https://wizgaming.vercel.app/?payment=return&order=${encodeURIComponent(orderNumber)}`
     };
 
     const hitpayResponse = await fetch(
