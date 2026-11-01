@@ -49,6 +49,42 @@ function sendError(res, status, message) {
   });
 }
 
+// Verifies the Cloudflare Turnstile token (bot protection).
+// If TURNSTILE_SECRET_KEY is not set, verification is skipped so the site
+// keeps working while you set it up. Set it in Vercel to turn protection on.
+async function verifyTurnstile(token, ip) {
+  const secret = process.env.TURNSTILE_SECRET_KEY?.trim();
+
+  if (!secret) {
+    console.warn("TURNSTILE_SECRET_KEY is not set; skipping bot verification.");
+    return true;
+  }
+
+  if (typeof token !== "string" || !token || token.length > 2048) {
+    return false;
+  }
+
+  try {
+    const form = new URLSearchParams({ secret, response: token });
+    if (ip) form.set("remoteip", ip);
+
+    const response = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        body: form,
+        signal: AbortSignal.timeout(8000)
+      }
+    );
+
+    const result = await response.json();
+    return result.success === true;
+  } catch (error) {
+    console.error("Turnstile verification error:", error?.message);
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -127,6 +163,24 @@ export default async function handler(req, res) {
         res,
         400,
         "Game Cash must be 50–5000 in increments of 50."
+      );
+    }
+
+    // Honeypot: real visitors never fill this hidden field.
+    if (body.website) {
+      return sendError(res, 400, "Unable to process your request.");
+    }
+
+    // Bot protection (Cloudflare Turnstile).
+    const clientIp = String(req.headers["x-forwarded-for"] ?? "")
+      .split(",")[0]
+      .trim();
+
+    if (!(await verifyTurnstile(body.turnstile_token, clientIp))) {
+      return sendError(
+        res,
+        400,
+        "Verification failed. Please refresh and try again."
       );
     }
 
