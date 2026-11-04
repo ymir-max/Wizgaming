@@ -14,6 +14,7 @@ const PHP_PER_USD = 64;
 
 const ALLOWED_GAMES = [
   "LEGEND AEGIS",
+  "MIR4 RED FRUIT",
   "ASTRAL",
   "ROM",
   "ROM: REMEMBER OF MAJESTY"
