@@ -384,7 +384,7 @@
           <select id="recharge-amount" name="amount" required class="form-control">
             <option value="" disabled selected>Choose Game Cash</option>
           </select>
-          <p class="text-xs text-gray-500 mt-2">Price calculation: US$0.15 per Game Cash × fixed rate ₱64/USD.</p>
+          <p class="text-xs text-gray-500 mt-2"><span id="recharge-rate-note">Price calculation: 1 Game Cash = 1 RMB × live exchange rate.</span></p>
         </div>
 
         <div class="rounded-xl border border-brand-gold/30 bg-brand-gold/5 p-4 flex items-center justify-between gap-4">
@@ -527,8 +527,11 @@
     const rechargeSubmit = document.getElementById('recharge-submit');
     const rechargeSubmitText = document.getElementById('recharge-submit-text');
 
-    const USD_PER_GAME_CASH = 0.15;
-    const PHP_PER_USD = 64;
+    // 1 Game Cash = 1 RMB. Live rates come from /api/rate (same rate the server charges).
+    const RMB_PER_COIN = 1;
+    let phpPerRmb = 0;
+    let usdPerRmb = 0;
+    const rechargeRateNote = document.getElementById('recharge-rate-note');
 
     function formatPHP(value) {
       return new Intl.NumberFormat('en-PH', {
@@ -540,9 +543,32 @@
     }
 
     function getPrice(cash) {
-      const usd = Number((cash * USD_PER_GAME_CASH).toFixed(2));
-      const php = Number((usd * PHP_PER_USD).toFixed(2));
+      const rmb = cash * RMB_PER_COIN;
+      const php = Number((rmb * phpPerRmb).toFixed(2));
+      const usd = Number((rmb * usdPerRmb).toFixed(2));
       return { usd, php };
+    }
+
+    async function loadRate() {
+      rechargeAmount.innerHTML = '<option value="" disabled selected>Loading live rate...</option>';
+
+      try {
+        const response = await fetch('/api/rate', { cache: 'no-store' });
+        const data = await response.json();
+
+        if (!response.ok || !data.success || !(data.php_per_rmb > 0) || !(data.usd_per_rmb > 0)) {
+          throw new Error('Invalid rate response');
+        }
+
+        phpPerRmb = data.php_per_rmb;
+        usdPerRmb = data.usd_per_rmb;
+        rechargeRateNote.textContent =
+          `Price calculation: 1 Game Cash = 1 RMB × ₱${phpPerRmb.toFixed(4)}/RMB (live rate).`;
+        populateAmounts();
+      } catch (error) {
+        rechargeAmount.innerHTML = '<option value="" disabled selected>Unable to load price. Please refresh.</option>';
+        rechargeRateNote.textContent = 'Unable to load the current exchange rate. Please refresh the page.';
+      }
     }
 
 
@@ -579,7 +605,7 @@
     }
 
     rechargeAmount.addEventListener('change', updatePrice);
-    populateAmounts();
+    loadRate();
 
     function showMessage(message, type = 'error') {
       rechargeMessage.textContent = message;

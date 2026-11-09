@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
+import { getPricingRates, calculatePrice } from "./_rates.js";
 
 // Defaults are PRODUCTION. For sandbox testing, set these in Vercel:
 //   HITPAY_API_URL=https://api.sandbox.hit-pay.com
@@ -8,9 +9,6 @@ const HITPAY_BASE_URL =
   process.env.HITPAY_API_URL?.trim() || "https://api.hit-pay.com";
 const HITPAY_CURRENCY =
   (process.env.HITPAY_CURRENCY?.trim() || "PHP").toUpperCase();
-
-const USD_PER_GAME_CASH = 0.15;
-const PHP_PER_USD = 64;
 
 const ALLOWED_GAMES = [
   "LEGEND AEGIS",
@@ -199,14 +197,9 @@ export default async function handler(req, res) {
       ? "ROM"
       : submittedGame;
 
-    // Server-side price calculation.
-    const priceUSD = Number(
-      (cash * USD_PER_GAME_CASH).toFixed(2)
-    );
-
-    const pricePHP = Number(
-      (priceUSD * PHP_PER_USD).toFixed(2)
-    );
+    // Server-side price calculation (1 Game Cash = 1 RMB, live RMB rate).
+    const rates = await getPricingRates();
+    const { totalRMB, pricePHP, priceUSD } = calculatePrice(cash, rates);
 
     // Generate a unique order number.
     const orderNumber =
@@ -362,6 +355,8 @@ export default async function handler(req, res) {
       game_cash: cash,
       price_usd: priceUSD,
       price_php: pricePHP,
+      price_rmb: totalRMB,
+      php_per_rmb: rates.php_per_rmb,
       currency: "PHP",
       checkout_url: checkoutUrl
     });
